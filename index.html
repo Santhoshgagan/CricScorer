@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#0a1018">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>CricScore Pro</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--bg:#0a1018;--s1:#111923;--s2:#1a2535;--s3:#213045;--g:#00e5a0;--y:#f7c948;--r:#ff4757;--b:#3498db;--p:#9b59b6;--t1:#e8edf5;--t2:#8a9bb5;--t3:#4a5a72;--bdr:#1e2d40;--rad:14px;--rs:8px}
+html,body{height:100%;background:var(--bg);color:var(--t1);font-family:'Rajdhani',sans-serif;font-size:16px}
+#app{max-width:480px;margin:0 auto;height:100vh;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.hdr{background:var(--s1);border-bottom:1px solid var(--bdr);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:40}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--g);letter-spacing:2px;line-height:1}
+.logo span{color:var(--y)}
+.htour{font-size:10px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:145px;margin-top:1px}
+.nav{background:var(--s1);border-top:2px solid var(--bdr);display:flex;flex-shrink:0;z-index:200;
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;
+  padding-bottom:env(safe-area-inset-bottom,0px)}
+.nb{flex:1;padding:10px 1px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:8px;font-weight:700;color:var(--t3);text-transform:uppercase;cursor:pointer;border:none;background:transparent;letter-spacing:.2px;user-select:none;-webkit-tap-highlight-color:transparent;min-height:52px}
+.nb.on{color:var(--g)}.nbi{display:flex;align-items:center;justify-content:center;width:24px;height:24px}.nb.on svg{stroke:var(--g);filter:drop-shadow(0 0 4px var(--g))}
+/* push page content above fixed nav */
+.pw{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:64px}
+.pg{padding:13px;display:none}.pg.on{display:block}
+.card{background:var(--s1);border:1px solid var(--bdr);border-radius:var(--rad);padding:14px;margin-bottom:10px}
+.sec{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;color:var(--t2);margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.sec::after{content:'';flex:1;height:1px;background:var(--bdr)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:9px 14px;border-radius:var(--rs);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:13px;letter-spacing:.4px;cursor:pointer;border:none;transition:all .12s;text-transform:uppercase;user-select:none}
+.bp{background:var(--g);color:#000}.bp:active{transform:scale(.95)}
+.bs{background:var(--s2);color:var(--t1);border:1px solid var(--bdr)}.bs:active{transform:scale(.95)}
+.bd{background:rgba(255,71,87,.1);color:var(--r);border:1px solid rgba(255,71,87,.26)}.bd:active{transform:scale(.95)}
+.by{background:rgba(247,201,72,.1);color:var(--y);border:1px solid rgba(247,201,72,.26)}
+.bb{background:rgba(52,152,219,.1);color:var(--b);border:1px solid rgba(52,152,219,.26)}
+.bpu{background:rgba(155,89,182,.1);color:var(--p);border:1px solid rgba(155,89,182,.26)}
+.sm{padding:5px 10px;font-size:11px}.ic{width:34px;height:34px;padding:0;font-size:15px}.fw{width:100%}
+.ig{margin-bottom:10px}
+.il{font-size:10px;font-weight:700;color:var(--t2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;display:block}
+.inp{width:100%;background:var(--s2);border:1px solid var(--bdr);border-radius:var(--rs);padding:9px 12px;color:var(--t1);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;outline:none}
+.inp:focus{border-color:var(--g)}
+.sel{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238a9bb5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.tg{display:inline-flex;align-items:center;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700}
+.tgg{background:rgba(0,229,160,.09);color:var(--g);border:1px solid rgba(0,229,160,.2)}
+.tgy{background:rgba(247,201,72,.09);color:var(--y);border:1px solid rgba(247,201,72,.2)}
+.tgr{background:rgba(255,71,87,.09);color:var(--r);border:1px solid rgba(255,71,87,.2)}
+.tgb{background:rgba(52,152,219,.09);color:var(--b);border:1px solid rgba(52,152,219,.2)}
+.tgp{background:rgba(155,89,182,.09);color:var(--p);border:1px solid rgba(155,89,182,.2)}
+.sb{background:linear-gradient(135deg,#0f1e2e,#162538);border:1px solid var(--bdr);border-radius:var(--rad);padding:16px;margin-bottom:10px;position:relative;overflow:hidden}
+.sb::before{content:'🏏';position:absolute;right:12px;top:8px;font-size:36px;opacity:.06}
+.sbtm{font-size:11px;font-weight:700;color:var(--t2);letter-spacing:1px;text-transform:uppercase}
+.sbsc{font-family:'Bebas Neue',sans-serif;font-size:60px;line-height:1;color:var(--g);letter-spacing:2px}
+.sbsc span{font-size:28px;color:var(--t2)}
+.sbm{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.sbst{font-size:12px;color:var(--t2)}.sbst b{color:var(--t1);font-weight:700}
+.rg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:7px}
+.rb{padding:14px 4px;border-radius:var(--rad);font-family:'Bebas Neue',sans-serif;font-size:25px;letter-spacing:1px;cursor:pointer;border:2px solid;transition:all .1s;text-align:center;user-select:none}
+.rb:active{transform:scale(.9)}
+.r0{background:rgba(138,155,181,.06);border-color:rgba(138,155,181,.18);color:var(--t2)}.r0:active{background:rgba(138,155,181,.15)}
+.r1{background:rgba(0,229,160,.06);border-color:rgba(0,229,160,.25);color:var(--g)}.r1:active{background:rgba(0,229,160,.15)}
+.r4{background:rgba(247,201,72,.06);border-color:rgba(247,201,72,.25);color:var(--y)}.r4:active{background:rgba(247,201,72,.15)}
+.wkb{width:100%;padding:12px;border-radius:var(--rad);font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;border:2px solid rgba(255,71,87,.32);background:rgba(255,71,87,.06);color:var(--r);margin-bottom:6px;user-select:none;transition:all .1s}
+.wkb:active{background:rgba(255,71,87,.15);transform:scale(.98)}
+.retb{width:100%;padding:10px;border-radius:var(--rad);font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;cursor:pointer;border:2px solid rgba(247,201,72,.32);background:rgba(247,201,72,.06);color:var(--y);margin-bottom:6px;user-select:none;transition:all .1s}
+.retb:active{background:rgba(247,201,72,.15);transform:scale(.98)}
+.unb{width:100%;padding:9px;border-radius:var(--rad);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;cursor:pointer;border:2px solid rgba(52,152,219,.28);background:rgba(52,152,219,.06);color:var(--b);margin-bottom:6px;user-select:none;transition:all .1s}
+.unb:active{background:rgba(52,152,219,.15)}.unb:disabled{opacity:.22;cursor:not-allowed}
+.brow{display:flex;align-items:center;gap:8px;padding:9px 11px;background:var(--s2);border-radius:var(--rs);margin-bottom:4px;border:1px solid var(--bdr)}
+.brow.striker{border-color:var(--g);background:rgba(0,229,160,.04)}
+.brow.out{opacity:.35}.brow.retired{opacity:.6;border-color:var(--y);background:rgba(247,201,72,.04)}.brow.waiting{opacity:.45;border-style:dashed}
+.bval{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;margin-left:auto;color:var(--t1)}
+.bball{font-size:10px;color:var(--t2);margin-left:4px}
+.blrow{display:flex;align-items:center;gap:7px;padding:8px 10px;background:var(--s3);border-radius:var(--rs);margin-bottom:4px;border:1px solid var(--bdr)}
+.blrow.cur{border-color:var(--p);background:rgba(155,89,182,.05)}
+.bc{display:inline-flex;align-items:center;justify-content:center;width:21px;height:21px;border-radius:50%;font-size:9px;font-weight:700;margin-right:2px;border:1.5px solid;flex-shrink:0}
+.bc0{background:rgba(138,155,181,.07);border-color:var(--bdr);color:var(--t3)}
+.bc1{background:rgba(0,229,160,.1);border-color:var(--g);color:var(--g)}
+.bc4{background:rgba(247,201,72,.1);border-color:var(--y);color:var(--y)}
+.bcW{background:rgba(255,71,87,.1);border-color:var(--r);color:var(--r)}
+.bcR{background:rgba(247,201,72,.1);border-color:var(--y);color:var(--y)}
+.pt{width:100%;border-collapse:collapse;font-size:12px}
+.pt th{background:var(--s2);padding:7px 4px;text-align:center;font-size:9px;font-weight:700;color:var(--t2);letter-spacing:.5px;text-transform:uppercase;border-bottom:1px solid var(--bdr);white-space:nowrap}
+.pt th:first-child{text-align:left;padding-left:8px}
+.pt td{padding:9px 4px;text-align:center;border-bottom:1px solid var(--bdr);vertical-align:middle}
+.pt td:first-child{text-align:left;padding-left:8px}
+.pt tr:last-child td{border-bottom:none}
+.pbdg{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;margin-right:3px}
+.pd1{background:rgba(247,201,72,.2);color:var(--y)}.pd23{background:rgba(52,152,219,.16);color:var(--b)}.pdx{background:var(--s3);color:var(--t2)}
+.mc{background:var(--s2);border:1px solid var(--bdr);border-radius:var(--rs);padding:10px 12px;margin-bottom:6px}
+.mc.live{border-color:var(--r);cursor:pointer}.mc.sched{opacity:.68;cursor:pointer;border-style:dashed}
+.bkm{background:var(--s2);border:1px solid var(--bdr);border-radius:var(--rs);overflow:hidden;margin-bottom:5px}
+.bkt{padding:9px 12px;display:flex;align-items:center;justify-content:space-between;font-weight:600;font-size:12px}
+.bkt:first-child{border-bottom:1px solid var(--bdr)}.bkt.wn{color:var(--g)}
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(5px)}
+.md{background:var(--s1);border-radius:var(--rad) var(--rad) 0 0;padding:18px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.mh{width:36px;height:4px;background:var(--bdr);border-radius:2px;margin:0 auto 14px}
+.mttl{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;margin-bottom:13px;color:var(--t1)}
+.ts{position:fixed;bottom:66px;left:50%;transform:translateX(-50%) translateY(14px);background:var(--s2);border:1px solid var(--bdr);border-radius:var(--rs);padding:8px 15px;font-size:12px;font-weight:700;z-index:300;opacity:0;transition:all .22s;pointer-events:none;white-space:nowrap;max-width:88vw;text-align:center}
+.ts.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.ts.ok{border-color:rgba(0,229,160,.32);color:var(--g)}.ts.er{border-color:rgba(255,71,87,.32);color:var(--r)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.ld{width:7px;height:7px;border-radius:50%;background:var(--r);animation:pulse 1.1s infinite;display:inline-block}
+.es{text-align:center;padding:36px 16px;color:var(--t3)}
+.ei{font-size:42px;margin-bottom:9px}.ett{font-size:14px;font-weight:700;color:var(--t2);margin-bottom:4px}.etx{font-size:11px;line-height:1.5}
+.dv{height:1px;background:var(--bdr);margin:10px 0}
+.sqn{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--s3);font-size:9px;font-weight:700;color:var(--t2);flex-shrink:0}
+.soban{background:linear-gradient(135deg,rgba(155,89,182,.13),rgba(52,152,219,.08));border:1px solid rgba(155,89,182,.27);border-radius:var(--rs);padding:9px 12px;margin-bottom:10px;text-align:center;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;color:var(--p)}
+.tiebox{background:linear-gradient(135deg,rgba(247,201,72,.07),rgba(255,71,87,.05));border:1px solid rgba(247,201,72,.2);border-radius:var(--rs);padding:11px;margin-bottom:10px;text-align:center}
+.warn{background:rgba(247,201,72,.07);border:1px solid rgba(247,201,72,.2);border-radius:var(--rs);padding:8px 11px;margin-bottom:8px;font-size:11px;color:var(--y);line-height:1.6}
+@media(max-width:360px){.sbsc{font-size:50px}.rb{font-size:22px}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="hdr">
+    <div>
+      <div class="logo">Cric<span>Score</span> <small style="font-size:9px;color:#4a5a72;font-family:Rajdhani,sans-serif;font-weight:700">PRO</small></div>
+      <div class="htour" id="hTour">No Tournament</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:7px">
+      <div id="liveInd" style="display:none;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--r)"><div class="ld"></div>LIVE</div>
+      <button class="btn bs ic" id="btnBack" onclick="navBack()" style="font-size:16px;opacity:.3">◀</button>
+      <button class="btn bs ic" id="btnFwd"  onclick="navFwd()"  style="font-size:16px;opacity:.3">▶</button>
+    </div>
+  </div>
+  <div class="pw">
+    <div class="pg on" id="pg-tour"></div>
+    <div class="pg" id="pg-teams"></div>
+    <div class="pg" id="pg-matches"></div>
+    <div class="pg" id="pg-score"></div>
+    <div class="pg" id="pg-points"></div>
+    <div class="pg" id="pg-summary"></div>
+  </div>
+  <div class="nav">
+    <button class="nb on" id="nb-tour" onclick="goPage('tour')">
+      <span class="nbi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M6 9H4a2 2 0 0 1-2-2V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2a2 2 0 0 1-2 2z"/><path d="M18 9h-2a2 2 0 0 1-2-2V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2a2 2 0 0 1-2 2z"/><path d="M12 21v-7"/><path d="M6 9v3a6 6 0 0 0 12 0V9"/><line x1="9" y1="21" x2="15" y2="21"/></svg></span>Tour
+    </button>
+    <button class="nb" id="nb-teams" onclick="goPage('teams')">
+      <span class="nbi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.85"/></svg></span>Teams
+    </button>
+    <button class="nb" id="nb-matches" onclick="goPage('matches')">
+      <span class="nbi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>Matches
+    </button>
+    <button class="nb" id="nb-score" onclick="goPage('score')">
+      <span class="nbi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>Score
+    </button>
+    <button class="nb" id="nb-points" onclick="goPage('points')">
+      <span class="nbi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>Points
+    </button>
+    <button class="nb" id="nb-summary" onclick="goPage('summary')">
+      <span class="nbi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg></span>Summary
+    </button>
+  </div>
+</div>
+<div id="moOverlay" class="mo" style="display:none" onclick="closeMo(event)">
+  <div class="md" onclick="event.stopPropagation()"><div class="mh"></div><div id="moBody"></div></div>
+</div>
+<div class="ts" id="toast"></div>
+
+<script>
+'use strict';
+// ════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════
+const SK = 'cs_v11';
+let S = load();
+
+function load(){
+  try{ const r=localStorage.getItem(SK); if(r) return JSON.parse(r); }catch(e){}
+  return { tournament:null, teams:[], schedule:[], matches:[], liveMatch:null, currentMatchId:null };
+}
+function save(){ try{ localStorage.setItem(SK,JSON.stringify(S)); }catch(e){} }
+
+const uid = ()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const esc = s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const ovs = b=>{ if(!b&&b!==0)return'0.0'; return `${Math.floor(b/6)}.${b%6}`; };
+const pk  = (a,b)=>[a,b].sort().join('|');
+const TC  = ['#00e5a0','#f7c948','#ff4757','#3498db','#9b59b6','#e67e22','#2ecc71','#e74c3c'];
+const TB  = ['rgba(0,229,160,.13)','rgba(247,201,72,.13)','rgba(255,71,87,.13)','rgba(52,152,219,.13)','rgba(155,89,182,.13)','rgba(230,126,34,.13)','rgba(46,204,113,.13)','rgba(231,76,60,.13)'];
+
+// ════════════════════════════════════════════
+// NAV
+// ════════════════════════════════════════════
+const PAGES = ['tour','teams','matches','score','points','summary'];
+let curPage = 'tour';
+
+function goPage(p){
+  document.querySelectorAll('.pg').forEach(el=>el.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(el=>el.classList.remove('on'));
+  document.getElementById('pg-'+p).classList.add('on');
+  document.getElementById('nb-'+p).classList.add('on');
+  document.querySelector('.pw').scrollTop=0;
+  curPage=p;
+  updateNavArrows();
+  renderPage(p);
+}
+function navBack(){ const i=PAGES.indexOf(curPage); if(i>0) goPage(PAGES[i-1]); }
+function navFwd() { const i=PAGES.indexOf(curPage); if(i<PAGES.length-1) goPage(PAGES[i+1]); }
+function updateNavArrows(){
+  const i=PAGES.indexOf(curPage);
+  document.getElementById('btnBack').style.opacity = i>0?'1':'.3';
+  document.getElementById('btnFwd').style.opacity  = i<PAGES.length-1?'1':'.3';
+}
+function renderPage(p){
+  if(p==='tour')     renderTour();
+  if(p==='teams')    renderTeams();
+  if(p==='matches')  renderMatches();
+  if(p==='score')    renderScore();
+  if(p==='points')   renderPoints();
+  if(p==='summary')  renderSummary();
+}
+
+// ════════════════════════════════════════════
+// TOAST / MODAL
+// ════════════════════════════════════════════
+let toastTimer;
+function toast(msg,type='ok'){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.className='ts on '+(type==='error'?'er':'ok');
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove('on'),2800);
+}
+function openMo(html){ document.getElementById('moBody').innerHTML=html; document.getElementById('moOverlay').style.display='flex'; }
+function closeMo(e){ if(!e||e.target===document.getElementById('moOverlay')) document.getElementById('moOverlay').style.display='none'; }
+function closeMoForce(){ document.getElementById('moOverlay').style.display='none'; }
+
+function h(tag,cls,inner,extra){
+  return `<${tag}${cls?` class="${cls}"`:''}${extra||''}>${inner??''}</${tag}>`;
+}
+
+// ════════════════════════════════════════════
+// INNINGS FACTORY — GULLY CRICKET
+//  • ONE striker at a time
+//  • maxWickets = players.length (all must be dismissed)
+//  • isRetired: retired batters can return
+// ════════════════════════════════════════════
+function makeInn(teamId, players){
+  return {
+    teamId, runs:0, wickets:0, balls:0,
+    batters: players.map((p,i)=>({
+      id:p.id, name:p.name, runs:0, balls:0,
+      isIn: i===0, isOut:false, isRetired:false, isStriker: i===0
+    })),
+    bowlers:{}, currentBowlerId:null, ballLog:[]
+  };
+}
+
+// ════════════════════════════════════════════
+// SCHEDULE — Berger round-robin, then interleave rounds
+// so same team NEVER appears in back-to-back fixtures
+// ════════════════════════════════════════════
+function buildSchedule(teams){
+  if(teams.length<2) return [];
+  // shuffle team order first
+  const t=[...teams];
+  for(let i=t.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[t[i],t[j]]=[t[j],t[i]];}
+
+  // Berger circle — produces balanced rounds
+  const n=t.length%2===0?t.length:t.length+1;
+  const pool=[...t];
+  if(pool.length<n) pool.push({id:'_bye_'});
+  const rounds=[];
+  let rot=pool.slice(1);
+  for(let r=0;r<n-1;r++){
+    const full=[pool[0],...rot],round=[];
+    for(let i=0;i<n/2;i++){
+      const a=full[i],b=full[n-1-i];
+      if(a.id!=='_bye_'&&b.id!=='_bye_') round.push([a.id,b.id]);
+    }
+    // shuffle within each round so we don't always get same order
+    for(let i=round.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[round[i],round[j]]=[round[j],round[i]];}
+    rounds.push(round);
+    rot=[rot[rot.length-1],...rot.slice(0,-1)];
+  }
+
+  // Flatten rounds into fixtures, then re-order to avoid same team back-to-back
+  const raw=[];
+  rounds.forEach(rd=>rd.forEach(([a,b])=>raw.push([a,b])));
+
+  // Greedy reorder: at each step pick a fixture that doesn't repeat either team from last fixture
+  const ordered=[];
+  const used=new Array(raw.length).fill(false);
+  let lastTeams=new Set();
+
+  for(let pick=0;pick<raw.length;pick++){
+    // prefer fixture that doesn't share a team with last fixture
+    let chosen=-1;
+    for(let i=0;i<raw.length;i++){
+      if(used[i]) continue;
+      const [a,b]=raw[i];
+      if(!lastTeams.has(a)&&!lastTeams.has(b)){chosen=i;break;}
+    }
+    // fallback: any remaining fixture
+    if(chosen===-1) for(let i=0;i<raw.length;i++){if(!used[i]){chosen=i;break;}}
+    if(chosen===-1) break;
+    used[chosen]=true;
+    ordered.push(raw[chosen]);
+    lastTeams=new Set(raw[chosen]);
+  }
+
+  let seq=1;
+  return ordered.map(([a,b])=>({id:uid(),seq:seq++,t1:a,t2:b}));
+}
+
+// ════════════════════════════════════════════
+// POINTS TABLE
+// ════════════════════════════════════════════
+function getPoints(){
+  const tbl={};
+  S.teams.forEach(t=>{tbl[t.id]={id:t.id,P:0,W:0,L:0,T:0,pts:0,rf:0,bf:0,ra:0,ba:0};});
+  S.matches.filter(m=>m.kind==='league'&&m.status==='done').forEach(m=>{
+    if(!tbl[m.t1]||!tbl[m.t2]) return;
+    const r1=m.inn1?.runs??0,b1=m.inn1?.balls??0,r2=m.inn2?.runs??0,b2=m.inn2?.balls??0;
+    tbl[m.t1].P++;tbl[m.t2].P++;
+    tbl[m.t1].rf+=r1;tbl[m.t1].bf+=b1;tbl[m.t1].ra+=r2;tbl[m.t1].ba+=b2;
+    tbl[m.t2].rf+=r2;tbl[m.t2].bf+=b2;tbl[m.t2].ra+=r1;tbl[m.t2].ba+=b1;
+    if(m.winner===m.t1){tbl[m.t1].W++;tbl[m.t1].pts+=2;tbl[m.t2].L++;}
+    else if(m.winner===m.t2){tbl[m.t2].W++;tbl[m.t2].pts+=2;tbl[m.t1].L++;}
+    else{tbl[m.t1].T++;tbl[m.t1].pts+=1;tbl[m.t2].T++;tbl[m.t2].pts+=1;}
+  });
+  S.matches.filter(m=>m.kind==='super_over'&&m.status==='done'&&m.winner).forEach(m=>{
+    if(!tbl[m.t1]||!tbl[m.t2]) return;
+    const w=m.winner,l=w===m.t1?m.t2:m.t1;
+    tbl[w].pts+=1; tbl[l].pts=Math.max(0,tbl[l].pts-1);
+    tbl[w].W++;tbl[l].L++;
+    tbl[w].T=Math.max(0,tbl[w].T-1);tbl[l].T=Math.max(0,tbl[l].T-1);
+  });
+  Object.values(tbl).forEach(r=>{
+    r.nrr=(r.bf>0?r.rf/(r.bf/6):0)-(r.ba>0?r.ra/(r.ba/6):0);
+  });
+  return Object.values(tbl).sort((a,b)=>b.pts!==a.pts?b.pts-a.pts:b.nrr-a.nrr);
+}
+
+function getStage(){
+  if(S.teams.length<2) return 'setup';
+  const done=S.matches.filter(m=>m.kind==='league'&&m.status==='done').length;
+  const live=S.matches.find(m=>m.kind==='league'&&m.status==='live');
+  if(done<S.schedule.length||live) return 'league';
+  if(S.teams.length>=5){const sf=S.matches.find(m=>m.kind==='semi');if(!sf||sf.status!=='done') return 'semi';}
+  const fin=S.matches.find(m=>m.kind==='final');
+  if(!fin||fin.status!=='done') return 'final';
+  return 'done';
+}
+
+function maxBowlerOv(total){ return Math.ceil(total/2); }
+
+// ════════════════════════════════════════════
+// TOUR PAGE
+// ════════════════════════════════════════════
+function renderTour(){
+  const el=document.getElementById('pg-tour');
+  document.getElementById('hTour').textContent=S.tournament?.name??'No Tournament';
+  document.getElementById('liveInd').style.display=S.liveMatch?'flex':'none';
+
+  if(!S.tournament){
+    el.innerHTML=`
+      <div class="sec">Tournament</div>
+      <div class="card">
+        <div style="font-size:14px;font-weight:700;margin-bottom:3px">🏆 Create Tournament</div>
+        <div style="font-size:10px;color:var(--t2);margin-bottom:12px">Gully cricket rules</div>
+        <div class="ig"><label class="il">Tournament Name</label><input class="inp" id="tName" placeholder="e.g. Gully Premier 2025" maxlength="40"></div>
+        <div class="ig"><label class="il">Overs Per Innings</label><input class="inp" type="number" id="tOvers" value="6" min="1" max="50"></div>
+        <button class="btn bp fw" onclick="createTour()">Create Tournament</button>
+      </div>`;
+    return;
+  }
+  const done=S.matches.filter(m=>m.status==='done').length;
+  const kos=S.matches.filter(m=>m.kind!=='league'&&m.kind!=='super_over');
+  const sos=S.matches.filter(m=>m.kind==='super_over');
+
+  let bk='';
+  if(kos.length||sos.length){
+    bk=`<div class="sec">Knockout</div>`;
+    kos.filter(m=>m.kind==='semi').forEach(m=>{bk+=bracketCard(m);});
+    kos.filter(m=>m.kind==='final').forEach(m=>{bk+=`<div style="font-size:10px;font-weight:700;color:var(--y);text-transform:uppercase;letter-spacing:1px;margin:7px 0 4px">🏆 Final</div>`+bracketCard(m);});
+    sos.forEach(m=>{bk+=`<div style="font-size:9px;font-weight:700;color:var(--p);text-transform:uppercase;letter-spacing:1px;margin:6px 0 3px">⚡ Super Over #${m.soNum??1}</div>`+bracketCard(m);});
+  }
+  el.innerHTML=`
+    <div class="sec">Tournament</div>
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:11px;margin-bottom:12px">
+        <div style="font-size:32px">🏆</div>
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:21px;letter-spacing:1px">${esc(S.tournament.name)}</div>
+          <div style="font-size:10px;color:var(--t2)">${S.tournament.overs} overs/inn · ${S.teams.length} teams · Gully</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px">
+        <div style="background:var(--s2);border-radius:var(--rs);padding:8px 5px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--g)">${S.teams.length}</div><div style="font-size:9px;color:var(--t2);font-weight:700;text-transform:uppercase">Teams</div></div>
+        <div style="background:var(--s2);border-radius:var(--rs);padding:8px 5px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--y)">${done}</div><div style="font-size:9px;color:var(--t2);font-weight:700;text-transform:uppercase">Done</div></div>
+        <div style="background:var(--s2);border-radius:var(--rs);padding:8px 5px;text-align:center"><div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--r)">${Math.max(0,S.schedule.length-done)}</div><div style="font-size:9px;color:var(--t2);font-weight:700;text-transform:uppercase">Left</div></div>
+      </div>
+    </div>
+    ${bk}
+    <div class="sec">Quick Actions</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:11px">
+      <button class="btn bs" onclick="goPage('teams')">👥 Teams</button>
+      <button class="btn bs" onclick="goPage('matches')">🏏 Matches</button>
+      <button class="btn bs" onclick="goPage('points')">📊 Points</button>
+      <button class="btn bs" onclick="goPage('summary')">📋 Summary</button>
+    </div>
+    <button class="btn bd fw sm" onclick="confirmReset()">Reset Tournament</button>`;
+}
+
+function createTour(){
+  const name=document.getElementById('tName').value.trim();
+  const overs=parseInt(document.getElementById('tOvers').value)||6;
+  if(!name){toast('Enter name','error');return;}
+  S.tournament={id:uid(),name,overs,createdAt:Date.now()};
+  S.schedule=[];S.matches=[];
+  save();toast('Tournament created! 🏆');renderTour();
+}
+
+function confirmReset(){
+  openMo(`<div class="mttl">⚠️ Reset Tournament</div>
+    <p style="color:var(--t2);font-size:12px;margin-bottom:15px;line-height:1.6">All data will be permanently deleted.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button class="btn bs" onclick="closeMoForce()">Cancel</button>
+      <button class="btn bd" onclick="doReset()">Reset All</button>
+    </div>`);
+}
+function doReset(){ S={tournament:null,teams:[],schedule:[],matches:[],liveMatch:null,currentMatchId:null};save();closeMoForce();toast('Reset done');renderTour(); }
+
+function bracketCard(m){
+  const t1=S.teams.find(t=>t.id===m.t1),t2=S.teams.find(t=>t.id===m.t2);
+  const s1=m.inn1?`${m.inn1.runs}/${m.inn1.wickets} (${ovs(m.inn1.balls)})`:m.status==='live'?'LIVE':'—';
+  const s2=m.inn2?`${m.inn2.runs}/${m.inn2.wickets} (${ovs(m.inn2.balls)})`:'';
+  return `<div class="bkm">
+    <div class="bkt${m.winner===m.t1?' wn':''}"><span>${esc(t1?.name??'TBD')}</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px">${s1}</span></div>
+    <div class="bkt${m.winner===m.t2?' wn':''}"><span>${esc(t2?.name??'TBD')}</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px">${s2}</span></div>
+  </div>`;
+}
+
+// ════════════════════════════════════════════
+// TEAMS PAGE
+// ════════════════════════════════════════════
+function renderTeams(){
+  const el=document.getElementById('pg-teams');
+  if(!S.tournament){el.innerHTML=empty('🏆','No Tournament','Create a tournament first');return;}
+  let rows='';
+  S.teams.forEach(t=>{
+    const c=TC[t.ci%8],bg=TB[t.ci%8];
+    rows+=`<div style="background:var(--s2);border:1px solid var(--bdr);border-radius:var(--rs);padding:10px 12px;margin-bottom:6px;display:flex;align-items:center;gap:10px">
+      <div style="width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:13px;flex-shrink:0;background:${bg};color:${c}">${esc(t.name.slice(0,2).toUpperCase())}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(t.name)}</div>
+        <div style="font-size:10px;color:var(--t2);margin-top:1px">${t.players.map(p=>esc(p.name)).join(' · ')}</div>
+      </div>
+      <div style="display:flex;gap:5px">
+        <button class="btn bs ic" onclick="editTeamMo('${t.id}')">✏️</button>
+        <button class="btn bd ic" onclick="delTeamMo('${t.id}')">🗑</button>
+      </div>
+    </div>`;
+  });
+  el.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div class="sec" style="margin:0">Teams</div>
+      <button class="btn bp sm" onclick="addTeamMo()">+ Add Team</button>
+    </div>
+    ${rows||empty('👥','No Teams','Add teams to get started')}`;
+}
+
+function tBadgeH(team,big){
+  if(!team) return '';
+  const c=TC[(team.ci??0)%8],bg=TB[(team.ci??0)%8];
+  return `<span class="tg" style="background:${bg};color:${c};border:1px solid ${c}28;font-size:${big?13:10}px">${esc(team.name)}</span>`;
+}
+
+function addTeamMo(){
+  if(!S.tournament){toast('Create tournament first','error');return;}
+  openMo(`<div class="mttl">Add Team</div>
+    <div class="ig"><label class="il">Team Name</label><input class="inp" id="mTN" placeholder="e.g. Chennai Kings" maxlength="30"></div>
+    <div class="ig"><label class="il">Player 1</label><input class="inp" id="mP1" placeholder="Player name" maxlength="25"></div>
+    <div class="ig"><label class="il">Player 2</label><input class="inp" id="mP2" placeholder="Player name" maxlength="25"></div>
+    <div class="ig"><label class="il">Player 3 (Optional)</label><input class="inp" id="mP3" placeholder="Player name" maxlength="25"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button class="btn bs" onclick="closeMoForce()">Cancel</button>
+      <button class="btn bp" onclick="doAddTeam()">Add Team</button>
+    </div>`);
+}
+
+function doAddTeam(){
+  const name=document.getElementById('mTN').value.trim();
+  const p1=document.getElementById('mP1').value.trim();
+  const p2=document.getElementById('mP2').value.trim();
+  const p3=document.getElementById('mP3').value.trim();
+  if(!name){toast('Enter team name','error');return;}
+  if(!p1||!p2){toast('Enter at least 2 players','error');return;}
+  if(S.teams.find(t=>t.name.toLowerCase()===name.toLowerCase())){toast('Team name exists','error');return;}
+  const players=[{id:uid(),name:p1},{id:uid(),name:p2}];
+  if(p3) players.push({id:uid(),name:p3});
+  const names=players.map(p=>p.name.toLowerCase());
+  if(new Set(names).size!==names.length){toast('Duplicate player names!','error');return;}
+  S.teams.push({id:uid(),name,players,ci:S.teams.length%8});
+  S.schedule=buildSchedule(S.teams);
+  save();closeMoForce();toast(`${name} added!`);renderTeams();renderTour();
+}
+
+function editTeamMo(tid){
+  const t=S.teams.find(x=>x.id===tid);if(!t) return;
+  const pf=t.players.map((p,i)=>`
+    <div class="ig"><label class="il">Player ${i+1}</label>
+      <div style="display:flex;gap:6px">
+        <input class="inp" style="flex:1" id="ep${i}" value="${esc(p.name)}" maxlength="25">
+        ${t.players.length>2?`<button class="btn bd ic" onclick="removePlayer('${tid}',${i})">✕</button>`:''}
+      </div>
+    </div>`).join('');
+  const addP=t.players.length<3?`
+    <div class="ig"><label class="il">Add Player</label>
+      <div style="display:flex;gap:6px">
+        <input class="inp" style="flex:1" id="newPName" placeholder="New player" maxlength="25">
+        <button class="btn bs ic" onclick="addPlayerToTeam('${tid}')">+</button>
+      </div>
+    </div>`:'';
+  openMo(`<div class="mttl">Edit Team</div>
+    <div class="ig"><label class="il">Team Name</label><input class="inp" id="eTN" value="${esc(t.name)}" maxlength="30"></div>
+    ${pf}${addP}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button class="btn bs" onclick="closeMoForce()">Cancel</button>
+      <button class="btn bp" onclick="doEditTeam('${tid}')">Save</button>
+    </div>`);
+}
+
+function removePlayer(tid,idx){
+  const t=S.teams.find(x=>x.id===tid);if(!t||t.players.length<=2){toast('Min 2 players','error');return;}
+  t.players.splice(idx,1);save();editTeamMo(tid);
+}
+function addPlayerToTeam(tid){
+  const t=S.teams.find(x=>x.id===tid);if(!t||t.players.length>=3) return;
+  const name=document.getElementById('newPName').value.trim();
+  if(!name){toast('Enter name','error');return;}
+  if(t.players.find(p=>p.name.toLowerCase()===name.toLowerCase())){toast('Already exists','error');return;}
+  t.players.push({id:uid(),name});save();editTeamMo(tid);
+}
+function doEditTeam(tid){
+  const t=S.teams.find(x=>x.id===tid);if(!t) return;
+  const name=document.getElementById('eTN').value.trim();
+  if(!name){toast('Enter name','error');return;}
+  if(S.teams.find(x=>x.id!==tid&&x.name.toLowerCase()===name.toLowerCase())){toast('Name exists','error');return;}
+  const names=[];
+  for(let i=0;i<t.players.length;i++){
+    const v=document.getElementById('ep'+i)?.value.trim();
+    if(!v){toast(`Fill Player ${i+1} name`,'error');return;}
+    names.push(v);
+  }
+  if(new Set(names.map(x=>x.toLowerCase())).size!==names.length){toast('Duplicate names!','error');return;}
+  t.name=name; t.players.forEach((p,i)=>p.name=names[i]);
+  save();closeMoForce();toast('Saved!');renderTeams();
+}
+function delTeamMo(tid){
+  const t=S.teams.find(x=>x.id===tid);
+  openMo(`<div class="mttl">Delete Team</div>
+    <p style="color:var(--t2);font-size:12px;margin-bottom:15px;line-height:1.6">Delete <b style="color:var(--t1)">${esc(t?.name??'')}</b>? Related matches removed.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button class="btn bs" onclick="closeMoForce()">Cancel</button>
+      <button class="btn bd" onclick="doDelTeam('${tid}')">Delete</button>
+    </div>`);
+}
+function doDelTeam(tid){
+  S.teams=S.teams.filter(x=>x.id!==tid);
+  S.matches=S.matches.filter(m=>m.t1!==tid&&m.t2!==tid);
+  S.schedule=buildSchedule(S.teams);
+  save();closeMoForce();toast('Deleted');renderTeams();renderTour();
+}
+
+// ════════════════════════════════════════════
+// MATCHES PAGE
+// ════════════════════════════════════════════
+function renderMatches(){
+  const el=document.getElementById('pg-matches');
+  if(!S.tournament){el.innerHTML=empty('🏏','No Tournament','Create a tournament first');return;}
+  const stage=getStage();
+  const stLbl={setup:'Setup',league:'League',semi:'Semi-Final',final:'Final',done:'Complete 🏆'};
+  const stCls={league:'tgy',semi:'tgb',final:'tgy',done:'tgg',setup:'tgr'};
+  const done=S.matches.filter(m=>m.kind==='league'&&m.status==='done').length;
+  const kos=S.matches.filter(m=>m.kind!=='league'&&m.kind!=='super_over');
+  const sos=S.matches.filter(m=>m.kind==='super_over');
+  const donePairs=new Set(S.matches.filter(m=>m.kind==='league'&&m.status==='done').map(m=>pk(m.t1,m.t2)));
+
+  let html=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+    <div class="sec" style="margin:0">Matches</div>
+    <span class="tg ${stCls[stage]??'tgb'}">${stLbl[stage]??stage}</span>
+  </div>`;
+  if(stage==='league') html+=`<div style="font-size:10px;color:var(--t2);margin-bottom:10px">League: ${done} / ${S.schedule.length} played</div>`;
+
+  if(kos.length||sos.length){
+    html+=`<div style="font-size:10px;font-weight:700;color:var(--y);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Knockout Stage</div>`;
+    kos.forEach(m=>{ html+=matchCardH(m); });
+    sos.forEach(m=>{ html+=`<div style="font-size:9px;font-weight:700;color:var(--p);text-transform:uppercase;letter-spacing:1px;margin:5px 0 3px">⚡ Super Over #${m.soNum??1}</div>`+matchCardH(m); });
+    html+=`<div class="dv"></div><div style="font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">League Matches</div>`;
+  }
+
+  S.schedule.forEach((sch,idx)=>{
+    const key=pk(sch.t1,sch.t2);
+    const dm=S.matches.find(m=>m.kind==='league'&&m.status==='done'&&pk(m.t1,m.t2)===key);
+    const lm=S.matches.find(m=>m.kind==='league'&&m.status==='live'&&pk(m.t1,m.t2)===key);
+    if(lm){html+=matchCardH(lm,idx+1);return;}
+    if(dm){html+=matchCardH(dm,idx+1);return;}
+    const t1=S.teams.find(t=>t.id===sch.t1),t2=S.teams.find(t=>t.id===sch.t2);
+    if(!t1||!t2) return;
+    html+=`<div class="mc sched" onclick="openTossMo('${sch.t1}','${sch.t2}','league')">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+        <span class="sqn">${idx+1}</span>${tBadgeH(t1)}<span style="font-size:9px;color:var(--t3)">VS</span>${tBadgeH(t2)}
+      </div>
+      <div style="font-size:10px;color:var(--t3)">Tap to start · Fixture ${idx+1}</div>
+    </div>`;
+  });
+
+  if(!S.teams.length) html+=empty('👥','No Teams','Add teams to generate fixtures');
+
+  if(stage==='semi'){
+    const pts=getPoints();
+    const t2=S.teams.find(t=>t.id===pts[1]?.id),t3=S.teams.find(t=>t.id===pts[2]?.id);
+    html+=`<div class="card" style="margin-top:7px"><div style="font-weight:700;margin-bottom:6px">🥊 Semi-Final Ready</div>
+      <div style="font-size:11px;color:var(--t2);margin-bottom:10px">${esc(t2?.name??'2nd')} vs ${esc(t3?.name??'3rd')} place</div>
+      <button class="btn bp fw" onclick="startKO('semi')">Start Semi-Final</button></div>`;
+  }
+  if(stage==='final'){
+    html+=`<div class="card" style="margin-top:7px"><div style="font-weight:700;margin-bottom:6px">🏆 Final Ready</div>
+      <button class="btn bp fw" onclick="startKO('final')">Start Final</button></div>`;
+  }
+  el.innerHTML=html;
+}
+
+function matchCardH(m,seq){
+  const t1=S.teams.find(t=>t.id===m.t1),t2=S.teams.find(t=>t.id===m.t2);if(!t1||!t2) return '';
+  const km={league:'League',semi:'SF',final:'FINAL',super_over:'SO'};
+  const sn=seq?`<span class="sqn">${seq}</span>`:'';
+  if(m.status==='live'){
+    const lm=S.liveMatch,inn=lm?.matchId===m.id?lm.innings[lm.innNum-1]:null;
+    const ls=inn?`${inn.runs}/${inn.wickets} (${ovs(inn.balls)})`:'In Progress';
+    return `<div class="mc live" onclick="resumeMatch('${m.id}')">
+      <div style="display:flex;align-items:center;gap:5px;margin-bottom:5px">${sn}${tBadgeH(t1)}<span style="font-size:9px;color:var(--t3)">VS</span>${tBadgeH(t2)}<span style="margin-left:auto;font-size:9px;font-weight:700;color:var(--t3)">${km[m.kind]}</span></div>
+      <div style="display:flex;align-items:center;gap:6px"><div class="ld"></div><span style="font-size:12px;font-weight:700;color:var(--r)">${ls}</span><span style="font-size:10px;color:var(--t2)">Tap →</span></div>
+    </div>`;
+  }
+  const r1=m.inn1?.runs??0,b1=m.inn1?.balls??0,r2=m.inn2?.runs??0,b2=m.inn2?.balls??0;
+  const w=S.teams.find(t=>t.id===m.winner);
+  const isTie=m.status==='done'&&!m.winner;
+  return `<div class="mc" onclick="viewMatchResult('${m.id}')" style="cursor:pointer">
+    <div style="display:flex;align-items:center;gap:5px;margin-bottom:5px">${sn}${tBadgeH(t1)}<span style="font-size:9px;color:var(--t3)">VS</span>${tBadgeH(t2)}<span style="margin-left:auto;font-size:9px;font-weight:700;color:var(--t3)">${km[m.kind]}</span></div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--t2);line-height:1.8">${esc(t1.name)}: ${r1}/${m.inn1?.wickets??0} (${ovs(b1)} ov)<br>${esc(t2.name)}: ${r2}/${m.inn2?.wickets??0} (${ovs(b2)} ov)</div>
+    ${isTie?'<div style="font-size:11px;font-weight:700;color:var(--y);margin-top:4px">🤝 TIE</div>':''}
+    ${w?`<div style="font-size:11px;font-weight:700;color:${TC[(w.ci??0)%8]};margin-top:4px">🏆 ${esc(w.name)} ${esc(m.result??'won')}</div>`:''}
+  </div>`;
+}
+
+function resumeMatch(mid){ S.currentMatchId=mid; save(); goPage('score'); }
+function viewMatchResult(mid){ S.currentMatchId=mid; save(); goPage('score'); }
+
+// ════════════════════════════════════════════
+// COIN FLIP TOSS
+// Flow: Opponent picks Head or Tail → Home team flips
+// Coin shows real face: HEAD = crown face, TAIL = star face
+// ════════════════════════════════════════════
+
+// SVG coin faces rendered inline — no emoji dependency
+const COIN_HEAD_SVG = `<svg width="90" height="90" viewBox="0 0 90 90">
+  <circle cx="45" cy="45" r="42" fill="#f7c948" stroke="#e6a800" stroke-width="3"/>
+  <circle cx="45" cy="45" r="36" fill="none" stroke="#e6a800" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <!-- crown -->
+  <path d="M24 58 L24 44 L33 52 L45 36 L57 52 L66 44 L66 58 Z" fill="#b8860b" stroke="#8b6914" stroke-width="1.5" stroke-linejoin="round"/>
+  <rect x="22" y="57" width="46" height="7" rx="2" fill="#b8860b" stroke="#8b6914" stroke-width="1"/>
+  <!-- crown gems -->
+  <circle cx="45" cy="42" r="3.5" fill="#ff4757"/>
+  <circle cx="31" cy="50" r="2.5" fill="#00e5a0"/>
+  <circle cx="59" cy="50" r="2.5" fill="#3498db"/>
+  <!-- H text -->
+  <text x="45" y="74" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="9" font-weight="900" fill="#8b6914">HEAD</text>
+</svg>`;
+
+const COIN_TAIL_SVG = `<svg width="90" height="90" viewBox="0 0 90 90">
+  <circle cx="45" cy="45" r="42" fill="#8a9bb5" stroke="#5a6a82" stroke-width="3"/>
+  <circle cx="45" cy="45" r="36" fill="none" stroke="#5a6a82" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <!-- star -->
+  <polygon points="45,20 50.9,37.6 69.5,37.6 55.3,48.6 61.2,66.2 45,55.2 28.8,66.2 34.7,48.6 20.5,37.6 39.1,37.6" fill="#4a5a72" stroke="#3a4a62" stroke-width="1.5"/>
+  <!-- inner star highlight -->
+  <polygon points="45,27 49.2,39.8 62.5,39.8 52.1,47.5 56.3,60.3 45,52.6 33.7,60.3 37.9,47.5 27.5,39.8 40.8,39.8" fill="#6a7a92" stroke="none"/>
+  <!-- T text -->
+  <text x="45" y="78" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="9" font-weight="900" fill="#3a4a62">TAIL</text>
+</svg>`;
+
+// makeCoinSpinHTML defined below doFlipCoin
+
+function openTossMo(t1Id,t2Id,kind){
+  const t1=S.teams.find(t=>t.id===t1Id),t2=S.teams.find(t=>t.id===t2Id);
+  if(!t1||!t2){toast('Teams not found','error');return;}
+  const lbl={league:'League Match',semi:'Semi-Final',final:'Final',super_over:'Super Over'}[kind]??'Match';
+  // t1 = home team (bats first in schedule order), t2 = opponent picks
+  window._toss={t1Id,t2Id,kind,opponentPick:null};
+
+  // Add coin keyframes
+  if(!document.getElementById('coinKF')){
+    const s=document.createElement('style');s.id='coinKF';
+    s.textContent=`
+      @keyframes coinFlipAnim{
+        0%  {transform:rotateY(0deg)   scale(1)}
+        15% {transform:rotateY(180deg) scale(1.3)}
+        30% {transform:rotateY(360deg) scale(1.5)}
+        50% {transform:rotateY(540deg) scale(1.4)}
+        70% {transform:rotateY(720deg) scale(1.2)}
+        85% {transform:rotateY(900deg) scale(1.1)}
+        100%{transform:rotateY(1080deg)scale(1)}
+      }
+      @keyframes fadeInUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+      @keyframes resultPop{0%{transform:scale(.5);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+    `;
+    document.head.appendChild(s);
+  }
+
+  openMo(`
+    <div class="mttl" style="text-align:center;letter-spacing:2px">🪙 TOSS — ${lbl}</div>
+    <!-- Teams banner -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;background:var(--s2);border-radius:var(--rs);padding:10px;margin-bottom:16px">
+      <div style="text-align:center;flex:1">
+        ${tBadgeH(t1,true)}
+        <div style="font-size:9px;color:var(--g);font-weight:700;margin-top:4px;text-transform:uppercase;letter-spacing:.5px">🏠 Home · Flips</div>
+      </div>
+      <div style="font-size:11px;color:var(--t3);font-weight:700">VS</div>
+      <div style="text-align:center;flex:1">
+        ${tBadgeH(t2,true)}
+        <div style="font-size:9px;color:var(--b);font-weight:700;margin-top:4px;text-transform:uppercase;letter-spacing:.5px">✈ Away · Calls</div>
+      </div>
+    </div>
+    <!-- Coin preview side by side -->
+    <div style="font-size:11px;font-weight:700;color:var(--t2);text-align:center;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px">${esc(t2.name)} — Pick a side:</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+      <button id="pickH" onclick="tossPick('H')"
+        style="background:rgba(247,201,72,.08);border:2px solid rgba(247,201,72,.25);border-radius:12px;padding:12px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;transition:all .15s">
+        ${COIN_HEAD_SVG}
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#f7c948">HEAD</span>
+        <span style="font-size:9px;color:var(--t3)">Crown face</span>
+      </button>
+      <button id="pickT" onclick="tossPick('T')"
+        style="background:rgba(138,155,181,.08);border:2px solid rgba(138,155,181,.25);border-radius:12px;padding:12px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;transition:all .15s">
+        ${COIN_TAIL_SVG}
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:#8a9bb5">TAIL</span>
+        <span style="font-size:9px;color:var(--t3)">Star face</span>
+      </button>
+    </div>
+    <div id="tossPickLabel" style="text-align:center;font-size:12px;color:var(--t3);min-height:18px;margin-bottom:10px"></div>
+    <button id="flipNowBtn" class="btn bp fw" style="font-size:15px;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;padding:13px" disabled onclick="doFlipCoin()">
+      🪙 ${esc(t1.name)} — FLIP COIN
+    </button>
+    <button class="btn bs fw" style="margin-top:8px" onclick="closeMoForce()">Cancel</button>
+  `);
+}
+
+function tossPick(side){
+  if(!window._toss) return;
+  window._toss.opponentPick=side;
+  // Highlight picked coin face button
+  const hBtn=document.getElementById('pickH'),tBtn=document.getElementById('pickT');
+  if(hBtn&&tBtn){
+    if(side==='H'){
+      hBtn.style.borderColor='#f7c948';hBtn.style.background='rgba(247,201,72,.18)';
+      tBtn.style.borderColor='rgba(138,155,181,.25)';tBtn.style.background='rgba(138,155,181,.08)';
+    }else{
+      tBtn.style.borderColor='#8a9bb5';tBtn.style.background='rgba(138,155,181,.22)';
+      hBtn.style.borderColor='rgba(247,201,72,.25)';hBtn.style.background='rgba(247,201,72,.08)';
+    }
+  }
+  const lbl=document.getElementById('tossPickLabel');
+  const t2=S.teams.find(t=>t.id===window._toss.t2Id);
+  if(lbl) lbl.innerHTML=`<b style="color:${side==='H'?'#f7c948':'#8a9bb5'}">${esc(t2?.name??'')} called ${side==='H'?'HEAD':'TAIL'}</b> — Now flip!`;
+  const btn=document.getElementById('flipNowBtn');
+  if(btn) btn.disabled=false;
+}
+
+// Spinning coin shows NEUTRAL face during spin, reveals result after
+function makeCoinSpinHTML(){
+  // Neutral coin shown during spin - neither head nor tail
+  return `<div id="coinSpinWrap" style="position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;background:rgba(0,0,0,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(10px)">
+    <div id="spinCoin" style="transform-style:preserve-3d;perspective:500px;animation:coinFlipAnim 1.6s ease-out forwards">
+      <svg width="110" height="110" viewBox="0 0 110 110">
+        <circle cx="55" cy="55" r="52" fill="#c8a830" stroke="#a08020" stroke-width="3"/>
+        <circle cx="55" cy="55" r="44" fill="none" stroke="#a08020" stroke-width="2" stroke-dasharray="5 4"/>
+        <text x="55" y="48" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="22" font-weight="900" fill="#7a5f10">CS</text>
+        <text x="55" y="70" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="11" font-weight="700" fill="#7a5f10">GULLY</text>
+        <text x="55" y="84" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="#a08020">CRICKET</text>
+      </svg>
+    </div>
+    <div style="margin-top:20px;font-family:'Bebas Neue',Arial,sans-serif;font-size:20px;letter-spacing:4px;color:#f7c948">FLIPPING…</div>
+    <div style="margin-top:8px;font-size:12px;color:#4a5a72;letter-spacing:1px">Good luck!</div>
+  </div>`;
+}
+
+function doFlipCoin(){
+  const p=window._toss;
+  if(!p||!p.opponentPick){toast('Pick a side first!','error');return;}
+
+  // TRUE RANDOM: use multiple entropy sources combined
+  const r1=Math.random();
+  const r2=Math.random();
+  const t1n=Date.now()%1000;
+  // XOR entropy: r1, r2, time-based value — ensures it's never deterministic
+  const entropy=(r1*1000 + r2*997 + t1n*3) % 100;
+  const result = entropy < 50 ? 'H' : 'T';  // truly random H or T
+
+  // Determine winner based on opponent's call vs actual result
+  const winnerId = p.opponentPick === result ? p.t2Id : p.t1Id;
+
+  // Disable flip button to prevent double tap
+  const btn=document.getElementById('flipNowBtn');
+  if(btn){btn.disabled=true;btn.textContent='Flipping…';}
+
+  // Show spinning neutral coin overlay
+  const wrap=document.createElement('div');
+  wrap.id='coinWrap';
+  wrap.innerHTML=makeCoinSpinHTML();
+  document.body.appendChild(wrap);
+
+  // After spin finishes, remove spinner and show RESULT face
+  setTimeout(()=>{
+    const w=document.getElementById('coinWrap');
+    if(w) document.body.removeChild(w);
+
+    const t1=S.teams.find(t=>t.id===p.t1Id);
+    const t2=S.teams.find(t=>t.id===p.t2Id);
+    const winner=S.teams.find(t=>t.id===winnerId);
+    const resultLabel = result==='H' ? 'HEAD' : 'TAIL';
+    const resultColor = result==='H' ? '#f7c948' : '#8a9bb5';
+    const faceSVG = result==='H' ? COIN_HEAD_SVG : COIN_TAIL_SVG;
+    const calledSide = p.opponentPick==='H' ? 'HEAD' : 'TAIL';
+    const calledCorrect = p.opponentPick===result;
+
+    openMo(`
+      <div style="text-align:center;margin-bottom:14px">
+        <div style="display:inline-block;animation:resultPop .5s ease-out;margin-bottom:8px">${faceSVG}</div>
+        <div style="font-family:'Bebas Neue',Arial,sans-serif;font-size:32px;letter-spacing:3px;color:${resultColor}">${resultLabel}!</div>
+        <div style="font-size:11px;color:var(--t2);margin-top:4px;line-height:1.6">
+          ${esc(t2?.name??'')} called <b style="color:${calledCorrect?'var(--g)':'var(--r)'}">${calledSide}</b>
+          &nbsp;·&nbsp;
+          <b style="color:${calledCorrect?'var(--g)':'var(--r)'}">${calledCorrect?'✓ Correct!':'✗ Wrong!'}</b>
+        </div>
+      </div>
+      <div style="background:linear-gradient(135deg,rgba(0,229,160,.08),rgba(247,201,72,.06));border:1px solid rgba(0,229,160,.25);border-radius:var(--rs);padding:14px;margin-bottom:14px;text-align:center">
+        <div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">&#127942; Toss Winner</div>
+        <div style="font-family:'Bebas Neue',Arial,sans-serif;font-size:24px;color:var(--g);letter-spacing:1px">${esc(winner?.name??'')}</div>
+      </div>
+      <div class="ig">
+        <label class="il">${esc(winner?.name??'')} elects to</label>
+        <select class="inp sel" id="moTD">
+          <option value="bat">&#127951; Bat First</option>
+          <option value="field">&#9917; Field First</option>
+        </select>
+      </div>
+      <button class="btn bp fw" style="font-family:'Bebas Neue',Arial,sans-serif;font-size:16px;letter-spacing:2px;padding:13px" onclick="startMatch('${p.t1Id}','${p.t2Id}','${p.kind}','${winnerId}')">
+        Start Match
+      </button>
+    `);
+  }, 1700);
+}
+
+function startMatch(t1Id,t2Id,kind,tossWinnerId){
+  const td=document.getElementById('moTD').value;
+  const tw=tossWinnerId;
+  const bf=td==='bat'?tw:(tw===t1Id?t2Id:t1Id);
+  const fi=bf===t1Id?t2Id:t1Id;
+  const btTeam=S.teams.find(t=>t.id===bf),fiTeam=S.teams.find(t=>t.id===fi);
+  const isSO=kind==='super_over';
+  const soNum=isSO?(S.matches.filter(x=>x.kind==='super_over').length+1):undefined;
+  const overs=isSO?1:(S.tournament?.overs??6);
+  const matchId=uid();
+  const newM={id:matchId,kind,t1:bf,t2:fi,tossWin:tw,status:'live',inn1:null,inn2:null,winner:null,result:'',createdAt:Date.now(),soNum};
+  const newLive={matchId,innNum:1,batTeam:bf,bowlTeam:fi,innings:[makeInn(bf,btTeam.players),makeInn(fi,fiTeam.players)],target:null,curOver:[],history:[],totalOvers:overs};
+  S.matches.push(newM); S.liveMatch=newLive; S.currentMatchId=matchId;
+  save();closeMoForce();toast('Match started! 🏏');goPage('score');
+}
+
+function startKO(kind){
+  const pts=getPoints();let t1Id,t2Id;
+  if(kind==='semi'){t1Id=pts[1]?.id;t2Id=pts[2]?.id;}
+  else{const sf=S.matches.find(m=>m.kind==='semi'&&m.status==='done');
+    if(sf){t1Id=pts[0]?.id;t2Id=sf.winner;}else{t1Id=pts[0]?.id;t2Id=pts[1]?.id;}}
+  if(!t1Id||!t2Id){toast('Teams not determined yet','error');return;}
+  openTossMo(t1Id,t2Id,kind);
+}
+
+// ════════════════════════════════════════════
+// SCORE PAGE
+// ════════════════════════════════════════════
+function renderScore(){
+  const el=document.getElementById('pg-score');
+  const lm=S.liveMatch;
+  const mid=lm?.matchId??S.currentMatchId;
+  const m=S.matches.find(x=>x.id===mid);
+  if(!m){
+    el.innerHTML=empty('📟','No Active Match','Start a match from Matches tab')+
+      `<button class="btn bp fw" style="margin-top:13px" onclick="goPage('matches')">Go to Matches</button>`;
+    return;
+  }
+  if(m.status==='done'){renderDoneScore(el,m);return;}
+  if(!lm){el.innerHTML='<div class="es"><div class="etx">Loading…</div></div>';return;}
+  renderLiveScore(el,lm,m);
+}
+
+function renderLiveScore(el,lm,m){
+  const inn=lm.innings[lm.innNum-1];
+  const isSO=m.kind==='super_over';
+  const totalOvers=lm.totalOvers??(isSO?1:(S.tournament?.overs??6));
+  const maxBalls=totalOvers*6;
+  const bowlerMaxOv=maxBowlerOv(totalOvers);
+  // Gully: maxWickets = ALL batters
+  const maxW=inn.batters.length;
+  const cOv=Math.floor(inn.balls/6),cBl=inn.balls%6;
+  const striker=inn.batters.find(b=>b.isStriker&&!b.isOut&&!b.isRetired);
+  const crr=inn.balls>0?(inn.runs/(inn.balls/6)).toFixed(2):'0.00';
+  const curBowler=inn.currentBowlerId?inn.bowlers[inn.currentBowlerId]:null;
+
+  // Over done = current bowler just finished an over (their balls%6===0 AND >0) AND more balls remain
+  const curBowlerDoneOver=curBowler&&curBowler.balls>0&&curBowler.balls%6===0;
+  const overDone=inn.balls>0&&inn.balls%6===0&&inn.balls<maxBalls&&curBowlerDoneOver;
+  const canUndo=(lm.history??[]).length>0;
+  const bt=S.teams.find(t=>t.id===lm.batTeam);
+  const bowlTeamObj=S.teams.find(t=>t.id===lm.bowlTeam);
+  const kl={league:'League',semi:'SF',final:'FINAL',super_over:'⚡ SO'}[m.kind]??'League';
+  const kCls=m.kind==='final'?'tgy':m.kind==='super_over'?'tgp':'tgb';
+
+  // chips
+  let chips=lm.curOver.map(b=>`<span class="bc bc${b}">${b}</span>`).join('');
+  if(!chips) chips=`<span style="color:var(--t3);font-size:10px">New Over</span>`;
+
+  // batting rows
+  let batRows='';
+  const activeStriker=inn.batters.find(b=>b.isStriker&&!b.isOut&&!b.isRetired);
+  if(activeStriker){
+    batRows+=`<div class="brow striker"><span style="font-size:15px;color:var(--g)">★</span><span style="flex:1;font-weight:700;font-size:14px">${esc(activeStriker.name)}</span><span class="bval">${activeStriker.runs}</span><span class="bball">(${activeStriker.balls}b)</span></div>`;
+  }else{
+    batRows+='<div style="font-size:12px;color:var(--t3);padding:4px 0">No active striker</div>';
+  }
+  // dismissed
+  inn.batters.filter(b=>b.isOut).forEach(b=>{
+    batRows+=`<div class="brow out"><span style="width:16px;font-size:10px;color:var(--r)">✗</span><span style="flex:1;font-size:12px">${esc(b.name)}</span><span class="bval" style="color:var(--t3);font-size:13px">${b.runs}</span><span class="bball">(${b.balls}b)</span></div>`;
+  });
+  // retired
+  inn.batters.filter(b=>b.isRetired&&!b.isOut).forEach(b=>{
+    batRows+=`<div class="brow retired"><span style="width:16px;font-size:10px;color:var(--y)">R</span><span style="flex:1;font-size:12px">${esc(b.name)} <span style="font-size:9px;color:var(--t3)">(ret)</span></span><span class="bval" style="color:var(--t2);font-size:13px">${b.runs}</span><span class="bball">(${b.balls}b)</span></div>`;
+  });
+  // waiting
+  inn.batters.filter(b=>!b.isIn&&!b.isOut&&!b.isRetired).forEach(b=>{
+    batRows+=`<div class="brow waiting"><span style="width:16px;font-size:10px;color:var(--t3)">—</span><span style="flex:1;font-size:12px;color:var(--t3)">${esc(b.name)} <span style="font-size:9px">(next)</span></span></div>`;
+  });
+
+  // bowling rows
+  let blRows='';
+  if(curBowler){
+    blRows+=`<div class="blrow cur"><span style="font-size:12px;color:var(--p)">⚾</span><span style="flex:1;font-weight:700;font-size:13px">${esc(curBowler.name)}</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--t2)">${ovs(curBowler.balls)} · ${curBowler.runs}r · ${curBowler.wickets}w</span></div>`;
+  }
+  Object.values(inn.bowlers).filter(b=>b.id!==inn.currentBowlerId).forEach(bw=>{
+    blRows+=`<div class="blrow"><span style="flex:1;font-size:12px">${esc(bw.name)}</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--t2)">${ovs(bw.balls)} · <span style="color:var(--r)">${bw.runs}r</span> · <span style="color:var(--g)">${bw.wickets}w</span></span></div>`;
+  });
+
+  // chase info
+  let chaseHtml='';
+  if(lm.innNum===2&&lm.target){
+    const need=Math.max(0,lm.target-inn.runs);
+    const bLeft=maxBalls-inn.balls;
+    const rrr=bLeft>0?(need/(bLeft/6)).toFixed(2):'∞';
+    chaseHtml=`<div style="background:rgba(247,201,72,.06);border:1px solid rgba(247,201,72,.17);border-radius:var(--rs);padding:8px 11px;margin-bottom:9px;display:flex;flex-wrap:wrap;gap:9px">
+      <div class="sbst">Target <b style="color:var(--y)">${lm.target}</b></div>
+      <div class="sbst">Need <b style="color:var(--r)">${need}</b> off <b style="color:var(--r)">${bLeft}b</b></div>
+      <div class="sbst">CRR <b>${crr}</b></div>
+      <div class="sbst">RRR <b>${rrr}</b></div>
+    </div>`;
+  }
+
+  // Score buttons shown only if: bowler selected AND over NOT done AND striker exists
+  const canScore=!overDone&&inn.currentBowlerId&&activeStriker;
+  const scoreBtns=canScore?`
+    <div class="rg">
+      <button class="rb r0" onclick="applyBall('run',0)">0<div style="font-size:9px;font-family:Rajdhani,sans-serif;letter-spacing:0">Dot</div></button>
+      <button class="rb r1" onclick="applyBall('run',1)">+1<div style="font-size:9px;font-family:Rajdhani,sans-serif;letter-spacing:0">Single</div></button>
+      <button class="rb r4" onclick="applyBall('run',4)">⊙4<div style="font-size:9px;font-family:Rajdhani,sans-serif;letter-spacing:0">Boundary</div></button>
+    </div>
+    <button class="wkb" onclick="applyBall('wicket')">🎯 WICKET</button>
+    <button class="retb" onclick="applyBall('retire')">🚶 RETIRED OUT</button>`:'';
+
+  // Warnings
+  let warns='';
+  if(overDone) warns+=`<div class="warn">⚠️ Over complete — select bowler for next over before scoring</div>`;
+  else if(!inn.currentBowlerId) warns+=`<div class="warn">⚠️ Select a bowler before scoring</div>`;
+  else if(!activeStriker) warns+=`<div class="warn">⚠️ Select next batsman to continue</div>`;
+
+  el.innerHTML=`
+    ${isSO?`<div class="soban">⚡ SUPER OVER #${m.soNum??1} · 1 Over Each</div>`:''}
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <span class="tg ${kCls}">${kl}</span>
+      <span class="tg tgr"><div class="ld" style="margin-right:3px"></div>INN ${lm.innNum}</span>
+    </div>
+    <div class="sb">
+      <div class="sbtm">${esc(bt?.name??'')} batting</div>
+      <div class="sbsc">${inn.runs}<span>/${inn.wickets}</span></div>
+      <div class="sbm">
+        <div class="sbst">Overs <b>${cOv}.${cBl} / ${totalOvers}</b></div>
+        <div class="sbst">CRR <b>${crr}</b></div>
+        <div class="sbst">Wkts left <b>${maxW-inn.wickets}</b></div>
+      </div>
+      <div style="margin-top:8px">${chips}</div>
+    </div>
+    ${chaseHtml}
+    ${warns}
+    <div class="card" style="margin-bottom:9px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="font-size:10px;font-weight:700;color:var(--t2);letter-spacing:.5px;text-transform:uppercase">🏏 Batting</div>
+        <button class="btn bb sm" onclick="openBatterSelectMo()">Select Striker</button>
+      </div>
+      ${batRows}
+    </div>
+    <div class="card" style="margin-bottom:9px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+        <div style="font-size:10px;font-weight:700;color:var(--t2);letter-spacing:.5px;text-transform:uppercase">⚾ Bowling</div>
+        <button class="btn bb sm" onclick="openBowlerSelectMo()">${curBowler?'Change Bowler':'Select Bowler'}</button>
+      </div>
+      ${!curBowler&&!overDone?'':''}
+      ${blRows||`<div style="font-size:11px;color:var(--t3);padding:4px 0">No bowler selected</div>`}
+    </div>
+    ${scoreBtns}
+    <button class="unb" onclick="doUndo()" ${canUndo?'':'disabled'}>↩ UNDO ${canUndo?`(${(lm.history??[]).length})`:''}</button>
+    <div style="display:flex;gap:7px">
+      <button class="btn bs" style="flex:1" onclick="goPage('matches')">← Back</button>
+      <button class="btn by" onclick="endMatchEarlyMo()">End Match</button>
+    </div>`;
+}
+
+// ════════════════════════════════════════════
+// BATTER SELECT MODAL — like bowler select
+// Shows all available batters (not out, not current striker)
+// Including retired batters who can return
+// ════════════════════════════════════════════
+function openBatterSelectMo(){
+  const lm=S.liveMatch;if(!lm) return;
+  const inn=lm.innings[lm.innNum-1];
+  const currentStriker=inn.batters.find(b=>b.isStriker&&!b.isOut&&!b.isRetired);
+
+  // Available = not out, not retired — can come to crease
+  // Also include retired batters (they can return)
+  const available=inn.batters.filter(b=>!b.isOut);
+
+  let rows='';
+  available.forEach(b=>{
+    const isNow=b.id===currentStriker?.id;
+    const isRetired=b.isRetired;
+    const statLabel=isNow?'<span class="tg tgg" style="font-size:8px;padding:1px 5px">NOW</span>':
+                    isRetired?'<span class="tg tgy" style="font-size:8px;padding:1px 5px">RETIRED</span>':
+                    !b.isIn?'<span class="tg tgb" style="font-size:8px;padding:1px 5px">NEXT</span>':'';
+    rows+=`<button class="btn bs fw" style="margin-bottom:7px;justify-content:flex-start;gap:9px;${isNow?'border-color:var(--g)':''}" onclick="doSelectBatter('${b.id}')">
+      <span style="font-size:14px;color:${isNow?'var(--g)':isRetired?'var(--y)':'var(--t2)'}">★</span>
+      <span style="flex:1;text-align:left;font-weight:${isNow?700:600}">${esc(b.name)}</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--t2)">${b.runs}r (${b.balls}b)</span>
+      ${statLabel}
+    </button>`;
+  });
+
+  openMo(`<div class="mttl">🏏 Select Striker</div>
+    <div style="font-size:11px;color:var(--t2);margin-bottom:12px;line-height:1.6;background:var(--s2);border-radius:var(--rs);padding:8px 11px">
+      Select the batsman currently on strike.<br>
+      <span style="color:var(--y)">★ Retired batters can return to bat.</span>
+    </div>
+    ${rows}
+    <button class="btn bd fw" style="margin-top:4px" onclick="closeMoForce()">Cancel</button>`);
+}
+
+function doSelectBatter(batterId){
+  const lm=S.liveMatch;if(!lm) return;
+  const nLm=JSON.parse(JSON.stringify(lm));
+  const ni=nLm.innings[nLm.innNum-1];
+  // Clear all striker flags
+  ni.batters.forEach(b=>b.isStriker=false);
+  const target=ni.batters.find(b=>b.id===batterId);
+  if(!target){toast('Batter not found','error');return;}
+  if(!target.isIn) target.isIn=true;
+  if(target.isRetired) target.isRetired=false; // returning retired batter
+  target.isStriker=true;
+  S.liveMatch=nLm;save();closeMoForce();
+  toast(`${target.name} on strike ★`);renderScore();
+}
+
+// ════════════════════════════════════════════
+// BOWLER SELECT MODAL
+// ════════════════════════════════════════════
+function openBowlerSelectMo(){
+  const lm=S.liveMatch;if(!lm) return;
+  const inn=lm.innings[lm.innNum-1];
+  const totalOvers=lm.totalOvers??(S.tournament?.overs??6);
+  const maxOv=maxBowlerOv(totalOvers);
+  const bowlTeamObj=S.teams.find(t=>t.id===lm.bowlTeam);
+  const players=bowlTeamObj?.players??[];
+  const prevId=inn.currentBowlerId;
+  const isNewOver=inn.balls>0&&inn.balls%6===0;
+
+  let rows='';
+  players.forEach(p=>{
+    const bdata=inn.bowlers[p.id];
+    const ovsBowled=bdata?Math.floor(bdata.balls/6):0;
+    const isMaxed=ovsBowled>=maxOv;
+    const isConsec=isNewOver&&p.id===prevId;
+    const isCurr=p.id===inn.currentBowlerId;
+    const blocked=isMaxed||isConsec;
+    const statsStr=bdata?`${ovs(bdata.balls)} · ${bdata.runs}r · ${bdata.wickets}w`:'not bowled';
+    rows+=`<button class="btn bs fw" style="margin-bottom:7px;justify-content:flex-start;gap:9px;opacity:${blocked?.3:1};cursor:${blocked?'not-allowed':'pointer'};border-color:${isCurr?'var(--p)':''}" onclick="${blocked?'':`doBowlerSelect('${p.id}','${p.name}')`}">
+      <span style="font-size:13px;color:${isMaxed?'var(--r)':isCurr?'var(--p)':'var(--t2)'}">⚾</span>
+      <span style="flex:1;text-align:left;font-weight:${isCurr?700:600}">${esc(p.name)}</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--t2)">${statsStr}</span>
+      ${isMaxed?'<span class="tg tgr" style="font-size:8px;padding:1px 5px">MAX</span>':''}
+      ${isConsec?'<span class="tg tgy" style="font-size:8px;padding:1px 5px">CONSEC</span>':''}
+      ${isCurr?'<span class="tg tgp" style="font-size:8px;padding:1px 5px">NOW</span>':''}
+    </button>`;
+  });
+
+  openMo(`<div class="mttl">Select Bowler</div>
+    <div style="font-size:11px;color:var(--t2);margin-bottom:12px;line-height:1.6;background:var(--s2);border-radius:var(--rs);padding:8px 11px">
+      Max <b style="color:var(--y)">${maxOv}</b> overs per bowler (total: ${totalOvers} overs)<br>
+      <span style="color:var(--t3)">Same bowler cannot bowl consecutive overs</span>
+    </div>
+    ${rows}
+    <button class="btn bd fw" style="margin-top:4px" onclick="closeMoForce()">Cancel</button>`);
+}
+
+function doBowlerSelect(pid,pname){
+  const lm=S.liveMatch;if(!lm) return;
+  const totalOvers=lm.totalOvers??(S.tournament?.overs??6);
+  const maxOv=maxBowlerOv(totalOvers);
+  const nLm=JSON.parse(JSON.stringify(lm));
+  const ni=nLm.innings[nLm.innNum-1];
+  const bdata=ni.bowlers[pid];
+  const ovsBowled=bdata?Math.floor(bdata.balls/6):0;
+  const isNewOver=ni.balls>0&&ni.balls%6===0;
+  if(ovsBowled>=maxOv){toast(`Max ${maxOv} overs reached!`,'error');return;}
+  if(isNewOver&&pid===ni.currentBowlerId){toast('Same bowler — consecutive overs!','error');return;}
+  if(!ni.bowlers[pid]) ni.bowlers[pid]={id:pid,name:pname,balls:0,runs:0,wickets:0};
+  ni.currentBowlerId=pid;
+  if(isNewOver) nLm.curOver=[];
+  S.liveMatch=nLm;save();closeMoForce();toast(`${pname} bowling ⚾`);renderScore();
+}
+
+// ════════════════════════════════════════════
+// APPLY BALL
+// ════════════════════════════════════════════
+function applyBall(type,val){
+  const lm=S.liveMatch;if(!lm) return;
+  const inn=lm.innings[lm.innNum-1];
+  const totalOvers=lm.totalOvers??(S.tournament?.overs??6);
+  const maxBalls=totalOvers*6;
+  const maxW=inn.batters.length;
+
+  if(!inn.currentBowlerId){toast('Select a bowler first!','error');return;}
+  const curBowler=inn.bowlers[inn.currentBowlerId];
+  if(curBowler&&curBowler.balls>0&&curBowler.balls%6===0&&inn.balls<maxBalls){toast('Select bowler for next over!','error');return;}
+
+  if(type==='retire'){
+    // Retired out: not a wicket, need to select next batter
+    const striker=inn.batters.find(b=>b.isStriker&&!b.isOut&&!b.isRetired);
+    if(!striker){toast('No striker!','error');return;}
+    // Save snapshot
+    const snap={inn:JSON.parse(JSON.stringify(inn)),innNum:lm.innNum,curOver:[...lm.curOver],target:lm.target,batTeam:lm.batTeam,bowlTeam:lm.bowlTeam};
+    const nLm=JSON.parse(JSON.stringify(lm));
+    nLm.history=[...(nLm.history??[]),snap].slice(-30);
+    const ni=nLm.innings[nLm.innNum-1];
+    const sk=ni.batters.find(b=>b.isStriker&&!b.isOut&&!b.isRetired);
+    sk.isRetired=true; sk.isStriker=false;
+    ni.ballLog.push({t:'R'});
+    nLm.curOver.push('R');
+    if(ni.balls%6===0) nLm.curOver=[];
+    S.liveMatch=nLm;save();
+    // Show next batter modal
+    openNextBatterMo(nLm,'retired');
+    return;
+  }
+
+  const striker=inn.batters.find(b=>b.isStriker&&!b.isOut&&!b.isRetired);
+  if(!striker){toast('No striker!','error');return;}
+
+  // Save snapshot
+  const snap={inn:JSON.parse(JSON.stringify(inn)),innNum:lm.innNum,curOver:[...lm.curOver],target:lm.target,batTeam:lm.batTeam,bowlTeam:lm.bowlTeam};
+  const nLm=JSON.parse(JSON.stringify(lm));
+  nLm.history=[...(nLm.history??[]),snap].slice(-30);
+  const ni=nLm.innings[nLm.innNum-1];
+  const sk=ni.batters.find(b=>b.isStriker&&!b.isOut&&!b.isRetired);
+  const bid=ni.currentBowlerId;
+
+  if(type==='run'){
+    ni.runs+=val; ni.balls++; sk.runs+=val; sk.balls++;
+    ni.ballLog.push({t:'r',v:val,bid});
+    nLm.curOver.push(String(val));
+    if(bid&&ni.bowlers[bid]){ni.bowlers[bid].balls++;ni.bowlers[bid].runs+=val;}
+    if(ni.balls%6===0) nLm.curOver=[];
+  }else if(type==='wicket'){
+    ni.wickets++; ni.balls++; sk.isOut=true; sk.isStriker=false;
+    ni.ballLog.push({t:'w',bid});
+    nLm.curOver.push('W');
+    if(bid&&ni.bowlers[bid]){ni.bowlers[bid].balls++;ni.bowlers[bid].wickets++;}
+    if(ni.balls%6===0) nLm.curOver=[];
+  }
+
+  const allOut=ni.wickets>=maxW;
+  const oversUp=ni.balls>=maxBalls;
+  const chased=nLm.innNum===2&&nLm.target!==null&&ni.runs>=nLm.target;
+
+  if(allOut||oversUp||chased){
+    S.liveMatch=nLm;save();
+    handleInnEnd(nLm);
+  }else if(type==='wicket'){
+    S.liveMatch=nLm;save();
+    openNextBatterMo(nLm,'wicket');
+  }else{
+    S.liveMatch=nLm;save();
+    renderScore();
+  }
+}
+
+function handleInnEnd(nLm){
+  const inn=nLm.innings[nLm.innNum-1];
+  if(nLm.innNum===1){
+    nLm.target=inn.runs+1;nLm.innNum=2;nLm.curOver=[];
+    const tmp=nLm.batTeam;nLm.batTeam=nLm.bowlTeam;nLm.bowlTeam=tmp;
+    nLm.innings[1].currentBowlerId=null;
+    S.liveMatch=nLm;save();toast(`Target: ${nLm.target} runs 🎯`);renderScore();
+  }else{
+    finishMatch(nLm);
+  }
+}
+
+function finishMatch(nLm){
+  const i1=nLm.innings[0],i2=nLm.innings[1];
+  let winner=null,result='';
+  if(i2.runs>i1.runs){winner=i2.teamId;const rem=i2.batters.filter(b=>!b.isOut&&!b.isRetired).length;result=`won by ${rem} wicket${rem!==1?'s':''}`;}
+  else if(i1.runs>i2.runs){winner=i1.teamId;const mg=i1.runs-i2.runs;result=`won by ${mg} run${mg!==1?'s':''}`;}
+  else result='tie';
+  const dm={...S.matches.find(x=>x.id===nLm.matchId),status:'done',winner,result,
+    inn1:{runs:i1.runs,wickets:i1.wickets,balls:i1.balls,teamId:i1.teamId,batters:i1.batters,bowlers:i1.bowlers},
+    inn2:{runs:i2.runs,wickets:i2.wickets,balls:i2.balls,teamId:i2.teamId,batters:i2.batters,bowlers:i2.bowlers}};
+  S.matches=S.matches.map(x=>x.id===dm.id?dm:x);
+  S.liveMatch=null;S.currentMatchId=dm.id;save();
+  if(result==='tie'){
+    toast("It's a TIE! ⚖️");renderScore();
+    setTimeout(()=>openTieMo(dm),400);
+  }else{
+    toast(`${S.teams.find(t=>t.id===winner)?.name??'Team'} wins! 🏆`);
+    renderScore();setTimeout(()=>goPage('matches'),1400);
+  }
+}
+
+// ════════════════════════════════════════════
+// NEXT BATTER MODAL
+// After wicket or retire: choose who bats next
+// Includes: players not yet batted + retired (can return)
+// ════════════════════════════════════════════
+function openNextBatterMo(lm,reason){
+  const inn=lm.innings[lm.innNum-1];
+  // Available next batters: not yet in (not isIn), not out, not retired
+  const notYetIn=inn.batters.filter(b=>!b.isIn&&!b.isOut&&!b.isRetired);
+  // Retired batters can return
+  const retired=inn.batters.filter(b=>b.isRetired&&!b.isOut);
+
+  const allOptions=[...notYetIn,...retired];
+
+  if(allOptions.length===0){
+    // No one left — innings effectively over (all batted or retired, none available)
+    renderScore();return;
+  }
+
+  let rows='';
+  notYetIn.forEach(b=>{
+    rows+=`<button class="btn bs fw" style="margin-bottom:7px;justify-content:flex-start;gap:9px" onclick="confirmNextBatter('${b.id}')">
+      <span style="font-size:14px;color:var(--t2)">🏏</span>
+      <span style="flex:1;text-align:left;font-weight:600">${esc(b.name)}</span>
+      <span class="tg tgb" style="font-size:8px;padding:1px 5px">NEW</span>
+    </button>`;
+  });
+  retired.forEach(b=>{
+    rows+=`<button class="btn bs fw" style="margin-bottom:7px;justify-content:flex-start;gap:9px;border-color:var(--y)" onclick="confirmNextBatter('${b.id}')">
+      <span style="font-size:14px;color:var(--y)">🔄</span>
+      <span style="flex:1;text-align:left;font-weight:600">${esc(b.name)} <span style="font-size:10px;color:var(--t3)">(was retired)</span></span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--t2)">${b.runs}r (${b.balls}b)</span>
+      <span class="tg tgy" style="font-size:8px;padding:1px 5px">RETURN</span>
+    </button>`;
+  });
+
+  const title=reason==='retire'?'Retired Out — Next Batter':'🏏 Wicket — Next Batter';
+  const msg=reason==='retire'?`Retired out. Choose who bats next. Retired batter can return later.`:`Wicket fell! Select next batter to come to the crease.`;
+  openMo(`<div class="mttl">${title}</div>
+    <div style="font-size:11px;color:var(--t2);margin-bottom:12px;line-height:1.6;background:var(--s2);border-radius:var(--rs);padding:8px 11px">${msg}</div>
+    ${rows}
+    <button class="btn bd fw" style="margin-top:4px" onclick="closeMoForce();renderScore()">Skip (no change)</button>`);
+}
+
+function confirmNextBatter(batterId){
+  const lm=S.liveMatch;if(!lm) return;
+  const nLm=JSON.parse(JSON.stringify(lm));
+  const ni=nLm.innings[nLm.innNum-1];
+  const target=ni.batters.find(b=>b.id===batterId);
+  if(!target){toast('Not found','error');return;}
+  target.isIn=true;
+  target.isRetired=false; // un-retire if returning
+  target.isStriker=true;
+  // Clear any other striker flag
+  ni.batters.forEach(b=>{if(b.id!==batterId) b.isStriker=false;});
+  S.liveMatch=nLm;save();closeMoForce();toast(`${target.name} to the crease 🏏`);renderScore();
+}
+
+function doUndo(){
+  const lm=S.liveMatch;if(!lm) return;
+  const hist=lm.history??[];
+  if(!hist.length){toast('Nothing to undo','error');return;}
+  const prev=hist[hist.length-1];
+  const nLm=JSON.parse(JSON.stringify(lm));
+  nLm.history=hist.slice(0,-1);
+  nLm.innings[prev.innNum-1]=JSON.parse(JSON.stringify(prev.inn));
+  nLm.innNum=prev.innNum;nLm.curOver=[...prev.curOver];
+  nLm.target=prev.target;nLm.batTeam=prev.batTeam;nLm.bowlTeam=prev.bowlTeam;
+  S.liveMatch=nLm;save();toast('Undone ↩');renderScore();
+}
+
+function endMatchEarlyMo(){
+  openMo(`<div class="mttl">End Match Early?</div>
+    <p style="color:var(--t2);font-size:12px;margin-bottom:14px;line-height:1.6">Current scores will be the final result.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button class="btn bs" onclick="closeMoForce()">Continue</button>
+      <button class="btn bd" onclick="doEndEarly()">End Match</button>
+    </div>`);
+}
+function doEndEarly(){
+  const lm=S.liveMatch;if(!lm){closeMoForce();return;}
+  closeMoForce();
+  const nLm=JSON.parse(JSON.stringify(lm));
+  const ni=nLm.innings[nLm.innNum-1];
+  if(nLm.innNum===1){
+    nLm.target=ni.runs+1;nLm.innNum=2;nLm.curOver=[];
+    const tmp=nLm.batTeam;nLm.batTeam=nLm.bowlTeam;nLm.bowlTeam=tmp;
+    nLm.innings[1].currentBowlerId=null;
+    S.liveMatch=nLm;save();toast(`Target: ${nLm.target}`);renderScore();
+  }else{
+    S.liveMatch=nLm;save();finishMatch(nLm);
+  }
+}
+
+// ════════════════════════════════════════════
+// TIE MODAL
+// ════════════════════════════════════════════
+function openTieMo(m){
+  const t1=S.teams.find(t=>t.id===m.t1),t2=S.teams.find(t=>t.id===m.t2);
+  const isFinal=m.kind==='final'||m.kind==='semi';
+  openMo(`<div class="tiebox">
+    <div style="font-size:34px;margin-bottom:5px">⚖️</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--y)">IT'S A TIE!</div>
+    <div style="font-size:12px;color:var(--t2);margin-top:3px">${esc(t1?.name??'')} vs ${esc(t2?.name??'')} · Scores level</div>
+  </div>
+  <button class="btn bp fw" style="margin-bottom:8px" onclick="startSuperOver('${m.t1}','${m.t2}')">⚡ Play Super Over (winner gets 2 pts)</button>
+  ${!isFinal?`<button class="btn by fw" style="margin-bottom:8px" onclick="closeMoForce();goPage('matches');toast('Tie — 1 pt each')">🤝 Declare Tie (1 pt each)</button>`:''}
+  <button class="btn bd fw" onclick="closeMoForce()">Cancel</button>`);
+}
+function startSuperOver(t1Id,t2Id){
+  closeMoForce();
+  openTossMo(t1Id,t2Id,'super_over');
+}
+
+// ════════════════════════════════════════════
+// DONE SCORE
+// ════════════════════════════════════════════
+function renderDoneScore(el,m){
+  const t1=S.teams.find(t=>t.id===m.t1),t2=S.teams.find(t=>t.id===m.t2);
+  const w=S.teams.find(t=>t.id===m.winner);
+  const kl={league:'League',semi:'Semi-Final',final:'FINAL',super_over:'⚡ Super Over'}[m.kind]??'Match';
+  const isTie=m.status==='done'&&!m.winner;
+  const r1=m.inn1?.runs??0,b1=m.inn1?.balls??0,r2=m.inn2?.runs??0,b2=m.inn2?.balls??0;
+  const isChaseWin=m.winner===m.t2;
+  const maxOv=m.kind==='super_over'?1:(S.tournament?.overs??6);
+
+  const batterRows=inn=>{
+    if(!inn?.batters) return '';
+    return inn.batters.map(b=>{
+      const cls=b.isOut?'out':b.isRetired?'retired':b.isIn?'striker':'waiting';
+      const icon=b.isOut?'✗':b.isRetired?'R':b.isIn?'★':'—';
+      const ic=b.isOut?'var(--r)':b.isRetired?'var(--y)':b.isIn?'var(--g)':'var(--t3)';
+      const note=!b.isIn&&!b.isOut&&!b.isRetired?' <span style="font-size:9px;color:var(--t3)">(dnb)</span>':b.isRetired?' <span style="font-size:9px;color:var(--y)">(ret)</span>':'';
+      return `<div class="brow ${cls}"><span style="width:16px;font-size:10px;color:${ic}">${icon}</span><span style="flex:1;font-size:12px;color:${b.isOut?'var(--t3)':'var(--t1)'}">${esc(b.name)}${note}</span><span class="bval" style="color:${b.isOut?'var(--t3)':'var(--t1)'};font-size:13px">${b.runs}</span><span class="bball">(${b.balls}b)</span></div>`;
+    }).join('');
+  };
+  const bowlerRows=inn=>{
+    const bws=Object.values(inn?.bowlers??{});if(!bws.length) return '';
+    return bws.map(bw=>`<div class="blrow"><span style="font-size:11px;color:var(--p)">⚾</span><span style="flex:1;font-size:12px">${esc(bw.name)}</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--t2)">${ovs(bw.balls)} · <span style="color:var(--r)">${bw.runs}r</span> · <span style="color:var(--g)">${bw.wickets}w</span></span></div>`).join('');
+  };
+
+  const nrr1=b1>0?(r1/(b1/6)).toFixed(3):'0.000', nrr2=b2>0?(r2/(b2/6)).toFixed(3):'0.000';
+
+  el.innerHTML=`
+    ${isTie?`<div class="tiebox"><div style="font-size:34px;margin-bottom:5px">⚖️</div><div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--y)">MATCH TIED</div><div style="font-size:12px;color:var(--t2);margin-top:3px">${esc(t1?.name??'')} vs ${esc(t2?.name??'')} · ${kl}</div></div>`
+    :`<div style="background:linear-gradient(135deg,#061a12,#0a1e2e);border:1px solid rgba(0,229,160,.17);border-radius:var(--rad);padding:18px;margin-bottom:12px;text-align:center">
+      <div style="font-size:38px;margin-bottom:6px">🏆</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:27px;color:var(--g);letter-spacing:2px">${esc(w?.name??'Match Complete')}</div>
+      <div style="font-size:12px;color:var(--t2);margin-top:3px">${esc(m.result??'')} · ${kl}</div>
+    </div>`}
+    <div class="card" style="margin-bottom:9px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div><div style="font-weight:700;font-size:13px">${esc(t1?.name??'')}</div><div style="font-size:9px;color:var(--t2)">Batting First</div></div>
+        <div style="text-align:right"><div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--g)">${r1}/${m.inn1?.wickets??0}</div><div style="font-size:10px;color:var(--t2)">${ovs(b1)} overs</div></div>
+      </div>
+      ${batterRows(m.inn1)}
+      ${bowlerRows(m.inn1)?`<div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin:8px 0 5px">Bowling (${esc(t2?.name??'')})</div>${bowlerRows(m.inn1)}`:''}
+    </div>
+    <div class="card" style="margin-bottom:9px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div><div style="font-weight:700;font-size:13px">${esc(t2?.name??'')}</div><div style="font-size:9px;color:var(--t2)">Chase ${r1+1}${isChaseWin?` · Won in ${ovs(b2)} ov`:''}</div></div>
+        <div style="text-align:right"><div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--y)">${r2}/${m.inn2?.wickets??0}</div><div style="font-size:10px;color:var(--t2)">${ovs(b2)} overs</div></div>
+      </div>
+      ${batterRows(m.inn2)}
+      ${bowlerRows(m.inn2)?`<div style="font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin:8px 0 5px">Bowling (${esc(t1?.name??'')})</div>${bowlerRows(m.inn2)}`:''}
+    </div>
+    ${m.kind==='league'?`<div class="card" style="margin-bottom:9px">
+      <div style="font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">📊 NRR Contribution</div>
+      <div style="font-size:10px;color:var(--t3);margin-bottom:8px;line-height:1.5">${isChaseWin?`✅ ${esc(t2?.name??'')} won in ${ovs(b2)} ov — only ${ovs(b2)} counted (not full ${maxOv})`:'✅ Full overs counted'}</div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bdr);font-size:11px"><span style="color:var(--t2)">${esc(t1?.name??'')} RR</span><span style="font-family:'JetBrains Mono',monospace">${r1}÷${ovs(b1)}ov=<b>${nrr1}</b></span></div>
+      <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:11px"><span style="color:var(--t2)">${esc(t2?.name??'')} RR</span><span style="font-family:'JetBrains Mono',monospace">${r2}÷${ovs(b2)}ov=<b>${nrr2}</b></span></div>
+    </div>`:''}
+    ${isTie?`<button class="btn bp fw" style="margin-bottom:8px" onclick="openTieMo(${JSON.stringify(m).replace(/"/g,'&quot;')})">⚡ Super Over / Options</button>`:''}
+    <button class="btn bs fw" onclick="goPage('matches')">← Back to Matches</button>`;
+}
+
+// ════════════════════════════════════════════
+// POINTS PAGE
+// ════════════════════════════════════════════
+function renderPoints(){
+  const el=document.getElementById('pg-points');
+  if(!S.tournament||!S.teams.length){el.innerHTML=empty('📊','No Data','Add teams and play matches');return;}
+  const pts=getPoints();
+  let rows='';
+  pts.forEach((r,i)=>{
+    const t=S.teams.find(x=>x.id===r.id);
+    const n=S.teams.length,isDirect=i===0,isSemi=n>=5&&(i===1||i===2);
+    const nrrStr=(r.nrr>=0?'+':'')+r.nrr.toFixed(3);
+    const badge=i===0?'pd1':i<=2?'pd23':'pdx';
+    const c=TC[(t?.ci??0)%8];
+    rows+=`<tr style="background:${isDirect?'rgba(0,229,160,.035)':isSemi?'rgba(247,201,72,.035)':''}">
+      <td><div style="display:flex;align-items:center;gap:4px">
+        <span class="pbdg ${badge}">${i+1}</span>
+        <span style="font-weight:700;font-size:12px;color:${c}">${esc(t?.name??'')}</span>
+        ${isDirect?'<span class="tg tgg" style="font-size:8px;padding:1px 4px">F</span>':''}
+        ${isSemi?'<span class="tg tgy" style="font-size:8px;padding:1px 4px">SF</span>':''}
+      </div></td>
+      <td>${r.P}</td><td style="color:var(--g)">${r.W}</td><td style="color:var(--r)">${r.L}</td>
+      <td style="color:var(--y);font-weight:${r.T>0?700:400}">${r.T}</td>
+      <td style="font-weight:700;font-family:'JetBrains Mono',monospace">${r.pts}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:10px;color:${r.nrr>=0?'var(--g)':'var(--r)'}">${nrrStr}</td>
+    </tr>`;
+  });
+
+  let nrrDetail='';
+  pts.forEach(r=>{
+    const t=S.teams.find(x=>x.id===r.id);if(!t) return;
+    const rfR=r.bf>0?(r.rf/(r.bf/6)).toFixed(3):'0.000',raR=r.ba>0?(r.ra/(r.ba/6)).toFixed(3):'0.000';
+    const nrrStr=(r.nrr>=0?'+':'')+r.nrr.toFixed(3);
+    nrrDetail+=`<div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--bdr)">
+      <div style="font-weight:700;font-size:12px;margin-bottom:3px;color:${TC[t.ci%8]}">${esc(t.name)}</div>
+      <div style="font-size:10px;color:var(--t2);line-height:1.9;font-family:'JetBrains Mono',monospace">
+        For: ${r.rf}r/${(r.bf/6).toFixed(1)}ov = <b style="color:var(--t1)">${rfR}</b><br>
+        Agst: ${r.ra}r/${(r.ba/6).toFixed(1)}ov = <b style="color:var(--t1)">${raR}</b><br>
+        NRR = ${rfR} − ${raR} = <b style="color:${r.nrr>=0?'var(--g)':'var(--r)'}">${nrrStr}</b>
+      </div>
+    </div>`;
+  });
+
+  el.innerHTML=`
+    <div class="sec">Points Table</div>
+    <div style="overflow-x:auto;border-radius:var(--rad);border:1px solid var(--bdr);margin-bottom:12px">
+      <table class="pt"><thead><tr>
+        <th style="min-width:110px">Team</th><th>P</th><th>W</th><th>L</th>
+        <th style="color:var(--y)">T</th><th>Pts</th><th style="min-width:64px">NRR</th>
+      </tr></thead><tbody>${rows}</tbody></table>
+    </div>
+    <div class="card">
+      <div style="font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">📐 NRR Detail</div>
+      ${nrrDetail}
+      <div style="font-size:9px;color:var(--t3);line-height:1.7">Win=2pts · SuperOver-win=2pts · Tie=1pt each</div>
+    </div>
+    <div class="card">
+      <div style="font-size:10px;color:var(--t2);line-height:1.8">
+        🟢 F = Direct Final (1st) · ${S.teams.length>=5?'🟡 SF = Semi-Final (2nd &amp; 3rd)':'🟡 Top 2 → Final'} · 🤝 T = Tied
+      </div>
+    </div>`;
+}
+
+// ════════════════════════════════════════════
+// SUMMARY PAGE
+// ════════════════════════════════════════════
+function renderSummary(){
+  const el=document.getElementById('pg-summary');
+  if(!S.tournament){el.innerHTML=empty('📋','No Tournament','Create a tournament first');return;}
+
+  const fin=S.matches.find(m=>m.kind==='final'&&m.status==='done');
+  const champ=fin?S.teams.find(t=>t.id===fin.winner):null;
+  const pts=getPoints();
+  const done=S.matches.filter(m=>m.status==='done');
+  const tRuns=done.reduce((a,m)=>a+(m.inn1?.runs??0)+(m.inn2?.runs??0),0);
+  const tWkts=done.reduce((a,m)=>a+(m.inn1?.wickets??0)+(m.inn2?.wickets??0),0);
+  const km={league:'League',semi:'Semi-Final',final:'Final',super_over:'Super Over'};
+
+  // Top scorers
+  const pR={};
+  done.forEach(m=>{[m.inn1,m.inn2].forEach(inn=>{if(!inn?.batters) return;
+    const team=S.teams.find(t=>t.id===inn.teamId);
+    inn.batters.forEach(b=>{if(!pR[b.id])pR[b.id]={name:b.name,team:team?.name??'',runs:0,balls:0,hs:0};
+      pR[b.id].runs+=b.runs;pR[b.id].balls+=b.balls;if(b.runs>pR[b.id].hs)pR[b.id].hs=b.runs;});});});
+  const topS=Object.values(pR).sort((a,b)=>b.runs-a.runs).slice(0,5);
+
+  // Top bowlers
+  const pB={};
+  done.forEach(m=>{[m.inn1,m.inn2].forEach(inn=>{if(!inn?.bowlers) return;
+    const bowlTid=inn.teamId===m.t1?m.t2:m.t1;
+    const bowlTeam=S.teams.find(t=>t.id===bowlTid);
+    Object.values(inn.bowlers).forEach(b=>{if(!pB[b.id])pB[b.id]={name:b.name,team:bowlTeam?.name??'',balls:0,runs:0,wickets:0};
+      pB[b.id].balls+=b.balls;pB[b.id].runs+=b.runs;pB[b.id].wickets+=b.wickets;});});});
+  const topB=Object.values(pB).sort((a,b)=>b.wickets!==a.wickets?b.wickets-a.wickets:a.runs-b.runs).slice(0,5);
+
+  const champHtml=champ?`<div style="background:linear-gradient(135deg,#061a12,#0a1e2e);border:1px solid rgba(0,229,160,.17);border-radius:var(--rad);padding:18px;margin-bottom:12px;text-align:center">
+    <div style="font-size:48px;margin-bottom:6px">🏆</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--g);letter-spacing:3px">${esc(champ.name)}</div>
+    <div style="font-size:12px;color:var(--t2);margin-top:3px">Tournament Champion · ${esc(S.tournament.name)}</div>
+  </div>`:'';
+
+  const statsHtml=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px">
+    ${[['var(--g)',S.teams.length,'Teams'],['var(--y)',done.length,'Matches'],['var(--r)',tRuns,'Runs'],['var(--b)',tWkts,'Wickets']].map(([c,v,l])=>`
+      <div style="background:var(--s1);border:1px solid var(--bdr);border-radius:var(--rs);padding:9px 7px;text-align:center">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:${c}">${v}</div>
+        <div style="font-size:9px;color:var(--t2);font-weight:700;text-transform:uppercase">${l}</div>
+      </div>`).join('')}
+  </div>`;
+
+  const topSHtml=topS.length?`<div class="sec">🏅 Top Scorers</div>`+topS.map((p,i)=>`
+    <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--s1);border:1px solid var(--bdr);border-radius:var(--rs);margin-bottom:5px">
+      <div style="width:24px;height:24px;border-radius:50%;background:${['rgba(247,201,72,.2)','rgba(138,155,181,.12)','rgba(52,152,219,.1)'][Math.min(i,2)]};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:${['var(--y)','var(--t2)','var(--b)'][Math.min(i,2)]};flex-shrink:0">${i+1}</div>
+      <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(p.name)}</div><div style="font-size:10px;color:var(--t2)">${esc(p.team)}</div></div>
+      <div style="text-align:right;flex-shrink:0"><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--y)">${p.runs}</div><div style="font-size:9px;color:var(--t2)">HS:${p.hs} · ${p.balls}b</div></div>
+    </div>`).join(''):'';
+
+  const topBHtml=topB.length?`<div class="sec">⚾ Top Bowlers</div>`+topB.map((b,i)=>`
+    <div style="display:flex;align-items:center;gap:9px;padding:8px 10px;background:var(--s1);border:1px solid var(--bdr);border-radius:var(--rs);margin-bottom:5px">
+      <div style="width:24px;height:24px;border-radius:50%;background:${['rgba(0,229,160,.2)','rgba(138,155,181,.12)','rgba(52,152,219,.1)'][Math.min(i,2)]};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:${['var(--g)','var(--t2)','var(--b)'][Math.min(i,2)]};flex-shrink:0">${i+1}</div>
+      <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(b.name)}</div><div style="font-size:10px;color:var(--t2)">${esc(b.team)}</div></div>
+      <div style="text-align:right;flex-shrink:0"><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--g)">${b.wickets}<span style="font-size:11px;color:var(--t2)"> wkts</span></div><div style="font-size:9px;color:var(--t2)">${ovs(b.balls)} ov · ${b.runs}r · ER:${b.balls>0?((b.runs/(b.balls/6)).toFixed(1)):'0.0'}</div></div>
+    </div>`).join(''):'';
+
+  const ptsRows=pts.map((r,i)=>{
+    const t=S.teams.find(x=>x.id===r.id);const badge=i===0?'pd1':i<=2?'pd23':'pdx';
+    return `<tr><td><span class="pbdg ${badge}">${i+1}</span><span style="font-weight:700;font-size:11px;color:${TC[(t?.ci??0)%8]}">${esc(t?.name??'')}</span></td>
+      <td>${r.P}</td><td style="color:var(--g)">${r.W}</td><td style="color:var(--r)">${r.L}</td>
+      <td style="color:var(--y)">${r.T}</td><td style="font-weight:700">${r.pts}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:9px;color:${r.nrr>=0?'var(--g)':'var(--r)'}">${(r.nrr>=0?'+':'')+r.nrr.toFixed(3)}</td></tr>`;
+  }).join('');
+
+  el.innerHTML=`
+    <div class="sec">Summary</div>
+    ${champHtml}${statsHtml}${topSHtml}${topBHtml}
+    <div class="sec">Points Table</div>
+    <div style="overflow-x:auto;border-radius:var(--rad);border:1px solid var(--bdr);margin-bottom:12px">
+      <table class="pt"><thead><tr><th>Team</th><th>P</th><th>W</th><th>L</th><th style="color:var(--y)">T</th><th>Pts</th><th>NRR</th></tr></thead><tbody>${ptsRows}</tbody></table>
+    </div>
+    <button class="btn bp fw" style="margin-top:8px" onclick="doDownload()">&#128229; Download Summary</button>`;
+}
+
+// ════════════════════════════════════════════
+// DOWNLOAD — opens beautiful HTML in new tab, auto-triggers print
+// User taps "Save as PDF" or uses browser Print
+// ════════════════════════════════════════════
+function doDownload(){
+  const pts=getPoints();
+  const done=S.matches.filter(m=>m.status==='done');
+  const fin=S.matches.find(m=>m.kind==='final'&&m.status==='done');
+  const champ=fin?S.teams.find(t=>t.id===fin.winner):null;
+  const tRuns=done.reduce((a,m)=>a+(m.inn1?.runs??0)+(m.inn2?.runs??0),0);
+  const tWkts=done.reduce((a,m)=>a+(m.inn1?.wickets??0)+(m.inn2?.wickets??0),0);
+  const km={league:'League',semi:'Semi-Final',final:'Final',super_over:'Super Over'};
+
+  const pR={};
+  done.forEach(m=>{[m.inn1,m.inn2].forEach(inn=>{if(!inn?.batters) return;
+    const team=S.teams.find(t=>t.id===inn.teamId);
+    inn.batters.forEach(b=>{if(!pR[b.id])pR[b.id]={name:b.name,team:team?.name??'',runs:0,balls:0,hs:0};
+      pR[b.id].runs+=b.runs;pR[b.id].balls+=b.balls;if(b.runs>pR[b.id].hs)pR[b.id].hs=b.runs;});});});
+  const topS=Object.values(pR).sort((a,b)=>b.runs-a.runs).slice(0,5);
+
+  const pB={};
+  done.forEach(m=>{[m.inn1,m.inn2].forEach(inn=>{if(!inn?.bowlers) return;
+    const bowlTid=inn.teamId===m.t1?m.t2:m.t1;
+    const bowlTeam=S.teams.find(t=>t.id===bowlTid);
+    Object.values(inn.bowlers).forEach(b=>{if(!pB[b.id])pB[b.id]={name:b.name,team:bowlTeam?.name??'',balls:0,runs:0,wickets:0};
+      pB[b.id].balls+=b.balls;pB[b.id].runs+=b.runs;pB[b.id].wickets+=b.wickets;});});});
+  const topB=Object.values(pB).sort((a,b)=>b.wickets!==a.wickets?b.wickets-a.wickets:a.runs-b.runs).slice(0,5);
+
+  function e2(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+  const ptsRowsH=pts.map((r,i)=>{
+    const t=S.teams.find(x=>x.id===r.id);
+    const nrr=(r.nrr>=0?'+':'')+r.nrr.toFixed(3);
+    const tc=TC[(t?.ci??0)%8];
+    const q=i===0?'<span style="background:#00e5a022;color:#00e5a0;border:1px solid #00e5a044;padding:1px 7px;border-radius:12px;font-size:9px;font-weight:700;margin-left:5px">F</span>':
+             (S.teams.length>=5&&(i===1||i===2))?'<span style="background:#f7c94822;color:#f7c948;border:1px solid #f7c94844;padding:1px 7px;border-radius:12px;font-size:9px;font-weight:700;margin-left:5px">SF</span>':'';
+    const med=i===0?'&#127945;':i===1?'&#129352;':i===2?'&#129353;':'';
+    return `<tr style="border-bottom:1px solid #1e2d40"><td style="padding:10px 8px;text-align:left"><span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:${tc}22;color:${tc};font-size:10px;font-weight:700;margin-right:6px">${i+1}</span>${med} <span style="color:${tc};font-weight:700">${e2(t?.name??'')}</span>${q}</td>
+      <td>${r.P}</td><td style="color:#00e5a0;font-weight:700">${r.W}</td><td style="color:#ff4757">${r.L}</td>
+      <td style="color:#f7c948;font-weight:${r.T>0?700:400}">${r.T}</td>
+      <td style="font-size:17px;font-weight:800;color:${tc}">${r.pts}</td>
+      <td style="color:${r.nrr>=0?'#00e5a0':'#ff4757'};font-family:monospace">${nrr}</td></tr>`;
+  }).join('');
+
+  const topSH=topS.map((p,i)=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #1e2d40">
+      <div style="width:28px;height:28px;border-radius:50%;background:${['rgba(247,201,72,.2)','rgba(138,155,181,.12)','rgba(52,152,219,.1)'][Math.min(i,2)]};display:flex;align-items:center;justify-content:center;font-weight:700;color:${['#f7c948','#8a9bb5','#3498db'][Math.min(i,2)]};flex-shrink:0;font-size:13px">${i+1}</div>
+      <div style="flex:1"><div style="font-weight:700;font-size:14px">${e2(p.name)}</div><div style="font-size:11px;color:#4a5a72">${e2(p.team)}</div></div>
+      <div style="text-align:right"><div style="font-size:24px;font-weight:800;color:#f7c948;letter-spacing:1px">${p.runs}</div><div style="font-size:10px;color:#8a9bb5">HS:${p.hs} &middot; ${p.balls}b &middot; SR:${p.balls>0?((p.runs/p.balls)*100).toFixed(0):'&#8212;'}</div></div>
+    </div>`).join('');
+
+  const topBH=topB.map((b,i)=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #1e2d40">
+      <div style="width:28px;height:28px;border-radius:50%;background:${['rgba(0,229,160,.2)','rgba(138,155,181,.12)','rgba(52,152,219,.1)'][Math.min(i,2)]};display:flex;align-items:center;justify-content:center;font-weight:700;color:${['#00e5a0','#8a9bb5','#3498db'][Math.min(i,2)]};flex-shrink:0;font-size:13px">${i+1}</div>
+      <div style="flex:1"><div style="font-weight:700;font-size:14px">${e2(b.name)}</div><div style="font-size:11px;color:#4a5a72">${e2(b.team)}</div></div>
+      <div style="text-align:right"><div style="font-size:24px;font-weight:800;color:#00e5a0;letter-spacing:1px">${b.wickets}<span style="font-size:12px;color:#8a9bb5"> wkts</span></div><div style="font-size:10px;color:#8a9bb5">${ovs(b.balls)} ov &middot; ${b.runs}r &middot; ER:${b.balls>0?((b.runs/(b.balls/6)).toFixed(1)):'&#8212;'}</div></div>
+    </div>`).join('');
+
+  const html=`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${e2(S.tournament.name)} — CricScore Pro</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a1018;color:#e8edf5;font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;padding:0 0 40px 0}
+.wrap{max-width:900px;margin:0 auto;padding:20px 16px}
+.hero{background:linear-gradient(135deg,#061a12,#0a1e2e);border:1px solid rgba(0,229,160,.18);border-radius:16px;padding:28px 20px;margin-bottom:24px;text-align:center}
+.sec-h{font-size:12px;font-weight:700;color:#8a9bb5;text-transform:uppercase;letter-spacing:1.5px;margin:22px 0 12px;padding-bottom:6px;border-bottom:1px solid #1e2d40}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:22px}
+.scard{background:#111923;border:1px solid #1e2d40;border-radius:12px;padding:14px 8px;text-align:center}
+table{width:100%;border-collapse:collapse}
+th{background:#1a2535;padding:8px 6px;font-size:10px;font-weight:700;color:#8a9bb5;letter-spacing:.5px;text-transform:uppercase;border-bottom:1px solid #1e2d40;text-align:center}
+td{padding:9px 6px;border-bottom:1px solid #1e2d40;vertical-align:middle;font-size:13px;text-align:center}
+tr:last-child td{border-bottom:none}
+.pt-wrap{overflow-x:auto;border-radius:12px;border:1px solid #1e2d40;margin-bottom:8px}
+.perf-wrap{background:#111923;border:1px solid #1e2d40;border-radius:14px;padding:14px 16px;margin-bottom:22px}
+.footer{text-align:center;padding:20px 0 10px;color:#4a5a72;font-size:11px;border-top:1px solid #1e2d40;margin-top:24px}
+</style></head><body>
+<div class="wrap">
+  <div class="hero">
+    <div style="font-size:56px;margin-bottom:10px">&#127942;</div>
+    ${champ?`<div style="font-family:Arial,sans-serif;font-size:34px;font-weight:900;color:#00e5a0;letter-spacing:2px;margin-bottom:6px">${e2(champ.name)}</div><div style="font-size:14px;color:#8a9bb5;margin-bottom:10px">Tournament Champion</div>`:''}
+    <div style="font-size:18px;font-weight:700;color:#e8edf5">${e2(S.tournament.name)}</div>
+    <div style="font-size:13px;color:#8a9bb5;margin-top:5px">${S.tournament.overs} overs/innings &middot; Gully Cricket &middot; ${new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'long',year:'numeric'})}</div>
+  </div>
+  <div class="sgrid">
+    <div class="scard"><div style="font-size:32px;font-weight:800;color:#00e5a0;line-height:1;margin-bottom:4px">${S.teams.length}</div><div style="font-size:10px;color:#8a9bb5;font-weight:700;text-transform:uppercase">Teams</div></div>
+    <div class="scard"><div style="font-size:32px;font-weight:800;color:#f7c948;line-height:1;margin-bottom:4px">${done.length}</div><div style="font-size:10px;color:#8a9bb5;font-weight:700;text-transform:uppercase">Matches</div></div>
+    <div class="scard"><div style="font-size:32px;font-weight:800;color:#ff4757;line-height:1;margin-bottom:4px">${tRuns}</div><div style="font-size:10px;color:#8a9bb5;font-weight:700;text-transform:uppercase">Runs</div></div>
+    <div class="scard"><div style="font-size:32px;font-weight:800;color:#3498db;line-height:1;margin-bottom:4px">${tWkts}</div><div style="font-size:10px;color:#8a9bb5;font-weight:700;text-transform:uppercase">Wickets</div></div>
+  </div>
+  <div class="sec-h">Points Table</div>
+  <div class="pt-wrap"><table><thead><tr><th style="text-align:left;padding-left:10px">Team</th><th>P</th><th style="color:#00e5a0">W</th><th style="color:#ff4757">L</th><th style="color:#f7c948">T</th><th>Pts</th><th>NRR</th></tr></thead><tbody>${ptsRowsH}</tbody></table></div>
+  <div style="font-size:10px;color:#4a5a72;margin-bottom:22px">F=Direct Final &middot; SF=Semi-Final &middot; Win=2pts &middot; SuperOver-win=2pts &middot; Tie=1pt each</div>
+  ${topS.length?`<div class="sec-h">Top Scorers</div><div class="perf-wrap">${topSH}</div>`:''}
+  ${topB.length?`<div class="sec-h">Top Bowlers</div><div class="perf-wrap">${topBH}</div>`:''}
+  <div class="footer">Generated by CricScore Pro &middot; ${e2(S.tournament.name)} &middot; ${new Date().toLocaleDateString('en-IN')}</div>
+</div>
+</body></html>`;
+
+  // Download as .html file — opens directly in any mobile or desktop browser
+  try{
+    const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download=(S.tournament.name||'Tournament').replace(/[^a-zA-Z0-9_\-]/g,'_')+'_Summary.html';
+    a.style.display='none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},500);
+    toast('Downloaded! Open the file in any browser &#128196;');
+  }catch(err){
+    toast('Download failed — try a different browser','error');
+  }
+}
+
+// ════════════════════════════════════════════
+// EMPTY STATE
+// ════════════════════════════════════════════
+function empty(ic,tt,tx){
+  return `<div class="es"><div class="ei">${ic}</div><div class="ett">${tt}</div><div class="etx">${tx}</div></div>`;
+}
+
+// ════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════
+renderTour();
+updateNavArrows();
+</script>
+</body>
+</html>
